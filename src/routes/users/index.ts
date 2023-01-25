@@ -73,9 +73,6 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
         key: 'subscribedToUserIds',
         inArray: id,
       });
-      // console.log('id', id);
-      // console.log('AllUsers', await fastify.db.users.findMany());
-      // console.log('foundSubscribes', foundSubscribes);
 
       if (foundSubscribes)
         Promise.all(
