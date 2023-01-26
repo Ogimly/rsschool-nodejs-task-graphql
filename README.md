@@ -52,7 +52,21 @@
       ) { id firstName lastName email subscribedToUserIds }
       }
      ```
-     2.9. Create profile.  
+     2.9. Create profile.
+     ```
+      mutation ex2_9 {
+      createProfile (
+         userId: "uuid",
+         memberTypeId: "basic",
+         avatar: "avatar",
+         sex: "sex",
+         birthday: 222222222,
+         country: "country",
+         street: "street",
+         city: "city"
+      ) { id userId memberTypeId avatar sex birthday country street city }
+      }
+     ```
      2.10. Create post.  
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
    - Update gql requests:  
