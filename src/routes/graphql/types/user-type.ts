@@ -1,16 +1,47 @@
-import { GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
+import {
+  GraphQLID,
+  GraphQLInputObjectType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 
 export const userType = new GraphQLObjectType({
   name: 'userType',
   description: 'User entity',
   fields: () => ({
-    id: { type: GraphQLString, description: 'Unique id (uuid), generated automatically' },
-    firstName: { type: GraphQLString, description: 'First name of the User' },
-    lastName: { type: GraphQLString, description: 'Last name of the User' },
-    email: { type: GraphQLString, description: 'E-mail of the User' },
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+      description: 'Unique id (uuid), generated automatically',
+    },
+    firstName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'First name of the User',
+    },
+    lastName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Last name of the User',
+    },
+    email: { type: new GraphQLNonNull(GraphQLString), description: 'E-mail of the User' },
     subscribedToUserIds: {
       type: new GraphQLList(GraphQLString),
       description: 'Array of users ids, that have followed the User',
     },
+  }),
+});
+
+export const userCreateType = new GraphQLInputObjectType({
+  name: 'userCreateType',
+  fields: () => ({
+    firstName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'First name of the User',
+    },
+    lastName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Last name of the User',
+    },
+    email: { type: new GraphQLNonNull(GraphQLString), description: 'E-mail of the User' },
   }),
 });

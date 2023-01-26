@@ -44,38 +44,44 @@
    - Create gql requests:  
      2.8. Create user.
      ```
-      mutation ex2_8 {
-      createUser (
-         firstName: "firstName1",
-         lastName: "lastName1",
-         email: "email1"
-      ) { id firstName lastName email subscribedToUserIds }
-      }
+     mutation ex2_8 {
+       createUser (
+         createUserDTO: {
+           firstName: "firstName1",
+           lastName: "lastName1",
+           email: "email1"
+         }
+       ) { id firstName lastName email subscribedToUserIds }
+     }
      ```
      2.9. Create profile.
      ```
-      mutation ex2_9 {
-      createProfile (
-         userId: "uuid",
-         memberTypeId: "basic",
-         avatar: "avatar",
-         sex: "sex",
-         birthday: 222222222,
-         country: "country",
-         street: "street",
-         city: "city"
-      ) { id userId memberTypeId avatar sex birthday country street city }
-      }
+     mutation ex2_9 {
+       createProfile (
+         createProfileDTO: {
+           userId: "uuid",
+           memberTypeId: "basic",
+           avatar: "avatar",
+           sex: "sex",
+           birthday: 222222222,
+           country: "country",
+           street: "street",
+           city: "city"
+         }
+       ) { id userId memberTypeId avatar sex birthday country street city }
+     }
      ```
      2.10. Create post.
      ```
-      mutation ex2_10 {
-      createPost (
-         userId: "uuid",
-         title: "title",
-         content: "content content content"
-      ) { id userId title content }
-      }
+     mutation ex2_10 {
+       createPost (
+         createPostDTO: {
+           userId: "uuid",
+           title: "title",
+           content: "content content content"
+         }
+       ) { id userId title content }
+     }
      ```
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
    - Update gql requests:  
