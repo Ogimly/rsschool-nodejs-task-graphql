@@ -31,14 +31,16 @@ export const userType = new GraphQLObjectType({
   }),
 });
 
-export const userCreateType = new GraphQLInputObjectType({
-  name: 'userCreateType',
-  fields: () => ({
-    firstName: { type: new GraphQLNonNull(GraphQLString) },
-    lastName: { type: new GraphQLNonNull(GraphQLString) },
-    email: { type: new GraphQLNonNull(GraphQLString) },
+export const userCreateType = {
+  type: new GraphQLInputObjectType({
+    name: 'userCreateType',
+    fields: () => ({
+      firstName: { type: new GraphQLNonNull(GraphQLString) },
+      lastName: { type: new GraphQLNonNull(GraphQLString) },
+      email: { type: new GraphQLNonNull(GraphQLString) },
+    }),
   }),
-});
+};
 
 export const userUpdateType = {
   type: new GraphQLInputObjectType({

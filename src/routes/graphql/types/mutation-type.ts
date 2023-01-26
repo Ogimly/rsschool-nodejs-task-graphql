@@ -14,7 +14,7 @@ export const getMutationType = (fastify: FastifyType) => ({
     createUser: {
       type: userType,
       args: {
-        createUserDTO: { type: userCreateType },
+        createUserDTO: userCreateType,
       },
       resolve: (_: any, { createUserDTO }: any) =>
         usersController.create(fastify, createUserDTO),
@@ -23,7 +23,7 @@ export const getMutationType = (fastify: FastifyType) => ({
     createProfile: {
       type: profileType,
       args: {
-        createProfileDTO: { type: profileCreateType },
+        createProfileDTO: profileCreateType,
       },
       resolve: (_: any, { createProfileDTO }: any) =>
         profilesController.create(fastify, createProfileDTO),
@@ -32,7 +32,7 @@ export const getMutationType = (fastify: FastifyType) => ({
     createPost: {
       type: postType,
       args: {
-        createPostDTO: { type: postCreateType },
+        createPostDTO: postCreateType,
       },
       resolve: (_: any, { createPostDTO }: any) =>
         postsController.create(fastify, createPostDTO),
