@@ -34,14 +34,19 @@ export const userType = new GraphQLObjectType({
 export const userCreateType = new GraphQLInputObjectType({
   name: 'userCreateType',
   fields: () => ({
-    firstName: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'First name of the User',
-    },
-    lastName: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'Last name of the User',
-    },
-    email: { type: new GraphQLNonNull(GraphQLString), description: 'E-mail of the User' },
+    firstName: { type: new GraphQLNonNull(GraphQLString) },
+    lastName: { type: new GraphQLNonNull(GraphQLString) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
   }),
 });
+
+export const userUpdateType = {
+  type: new GraphQLInputObjectType({
+    name: 'userUpdateType',
+    fields: () => ({
+      firstName: { type: new GraphQLNonNull(GraphQLString) },
+      lastName: { type: new GraphQLNonNull(GraphQLString) },
+      email: { type: new GraphQLNonNull(GraphQLString) },
+    }),
+  }),
+};

@@ -85,7 +85,19 @@
      ```
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
    - Update gql requests:  
-     2.12. Update user.  
+     2.12. Update user.
+     ```
+     mutation ex2_12 {
+       updateUser (
+         id : "e6ff2e47-8fc1-45bd-bcfb-6e5b85b26a25",
+         updateUserDTO: {
+           firstName: "firstName2",
+           lastName: "lastName2",
+           email: "email2"
+         }
+       ) { id firstName lastName email subscribedToUserIds }
+     }
+     ```
      2.13. Update profile.  
      2.14. Update post.  
      2.15. Update memberType.  

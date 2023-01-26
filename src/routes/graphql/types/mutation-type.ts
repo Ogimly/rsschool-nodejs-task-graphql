@@ -2,10 +2,11 @@ import { FastifyType } from './fastify-type';
 // import { memberTypeType } from './member-type-type';
 import { postCreateType, postType } from './post-type';
 import { profileCreateType, profileType } from './profile-type';
-import { userCreateType, userType } from './user-type';
+import { userCreateType, userType, userUpdateType } from './user-type';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
+import { idType } from './reused-types';
 
 export const getMutationType = (fastify: FastifyType) => ({
   name: 'RootMutationType',
@@ -35,6 +36,16 @@ export const getMutationType = (fastify: FastifyType) => ({
       },
       resolve: (_: any, { createPostDTO }: any) =>
         postsController.create(fastify, createPostDTO),
+    },
+
+    updateUser: {
+      type: userType,
+      args: {
+        id: idType,
+        updateUserDTO: userUpdateType,
+      },
+      resolve: (_: any, { id, updateUserDTO }: any) =>
+        usersController.update(fastify, id, updateUserDTO),
     },
   }),
 });
