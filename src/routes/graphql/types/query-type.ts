@@ -4,10 +4,10 @@ import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import { IncomingMessage, ServerResponse } from 'http';
 import { FromSchemaDefaultOptions } from 'json-schema-to-ts';
 import { RoutesErrors } from '../../const/routes-errors';
-import { memberTypeType } from './memberTypeType';
-import { postType } from './postType';
-import { profileType } from './profileType';
-import { userType } from './userType';
+import { memberTypeType } from './member-type-type';
+import { postType } from './post-type';
+import { profileType } from './profile-type';
+import { userType } from './user-type';
 
 export const getQueryType = (
   fastify: FastifyInstance<
