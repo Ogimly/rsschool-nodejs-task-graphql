@@ -1,28 +1,18 @@
-import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
-import { FastifyInstance, RawServerDefault, FastifyBaseLogger } from 'fastify';
 import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
-import { IncomingMessage, ServerResponse } from 'http';
-import { FromSchemaDefaultOptions } from 'json-schema-to-ts';
-import { RoutesErrors } from '../../const/routes-errors';
+import { RoutesErrors } from '../../utils/routes-errors';
+import { FastifyType } from './fastify-type';
 import { memberTypeType } from './member-type-type';
 import { postType } from './post-type';
 import { profileType } from './profile-type';
 import { userType } from './user-type';
+import * as usersController from '../../utils/users-controller';
 
-export const getQueryType = (
-  fastify: FastifyInstance<
-    RawServerDefault,
-    IncomingMessage,
-    ServerResponse<IncomingMessage>,
-    FastifyBaseLogger,
-    JsonSchemaToTsProvider<FromSchemaDefaultOptions>
-  >
-) => ({
+export const getQueryType = (fastify: FastifyType) => ({
   name: 'RootQueryType',
   fields: () => ({
     users: {
       type: new GraphQLList(userType),
-      resolve: () => fastify.db.users.findMany(),
+      resolve: () => usersController.findMany(fastify),
     },
 
     profiles: {
@@ -48,12 +38,7 @@ export const getQueryType = (
           type: new GraphQLNonNull(GraphQLString),
         },
       },
-      resolve: async (_: any, { id }: any) => {
-        const found = await fastify.db.users.findOne({ key: 'id', equals: id });
-        if (!found) throw fastify.httpErrors.notFound(RoutesErrors.userNotFound);
-
-        return found;
-      },
+      resolve: async (_: any, { id }: any) => usersController.findOne(fastify, id),
     },
 
     profile: {

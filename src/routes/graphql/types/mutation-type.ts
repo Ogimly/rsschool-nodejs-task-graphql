@@ -1,25 +1,15 @@
-import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts';
-import { FastifyInstance, RawServerDefault, FastifyBaseLogger } from 'fastify';
 import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
-import { IncomingMessage, ServerResponse } from 'http';
-import { FromSchemaDefaultOptions } from 'json-schema-to-ts';
 import { CreateProfileDTO } from '../../../utils/DB/entities/DBProfiles';
 import { CreateUserDTO } from '../../../utils/DB/entities/DBUsers';
-import { RoutesErrors } from '../../const/routes-errors';
+import { RoutesErrors } from '../../utils/routes-errors';
+import { FastifyType } from './fastify-type';
 // import { memberTypeType } from './member-type-type';
 // import { postType } from './post-type';
 import { profileType } from './profile-type';
 import { userType } from './user-type';
+import * as usersController from '../../utils/users-controller';
 
-export const getMutationType = (
-  fastify: FastifyInstance<
-    RawServerDefault,
-    IncomingMessage,
-    ServerResponse<IncomingMessage>,
-    FastifyBaseLogger,
-    JsonSchemaToTsProvider<FromSchemaDefaultOptions>
-  >
-) => ({
+export const getMutationType = (fastify: FastifyType) => ({
   name: 'RootMutationType',
   fields: () => ({
     createUser: {
@@ -30,7 +20,7 @@ export const getMutationType = (
         email: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (_: any, createUserDTO: CreateUserDTO) =>
-        fastify.db.users.create(createUserDTO),
+        usersController.create(fastify, createUserDTO),
     },
 
     createProfile: {
