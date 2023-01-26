@@ -20,7 +20,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       const { id } = request.params;
       const found = await fastify.db.memberTypes.findOne({ key: 'id', equals: id });
 
-      if (!found) throw fastify.httpErrors.notFound(RoutesErrors.memberTypesNotFound);
+      if (!found) throw fastify.httpErrors.notFound(RoutesErrors.memberTypeNotFound);
 
       return found;
     }
@@ -38,7 +38,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       const { id } = request.params;
 
       const found = await fastify.db.memberTypes.findOne({ key: 'id', equals: id });
-      if (!found) throw fastify.httpErrors.badRequest(RoutesErrors.memberTypesNotFound);
+      if (!found) throw fastify.httpErrors.badRequest(RoutesErrors.memberTypeNotFound);
 
       const { body } = request;
       return fastify.db.memberTypes.change(id, body);

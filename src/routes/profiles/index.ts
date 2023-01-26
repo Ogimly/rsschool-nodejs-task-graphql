@@ -46,7 +46,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       });
 
       if (!memberTypeFound)
-        throw fastify.httpErrors.badRequest(RoutesErrors.memberTypesNotFound);
+        throw fastify.httpErrors.badRequest(RoutesErrors.memberTypeNotFound);
 
       const { userId } = request.body;
       const found = await fastify.db.profiles.findOne({ key: 'userId', equals: userId });
