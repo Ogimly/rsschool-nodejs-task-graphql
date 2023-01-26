@@ -16,23 +16,23 @@
      2.1. Get users, profiles, posts, memberTypes - 4 operations in one query.
 
      ```
-     {
+      query ex2_1 {
       users { id firstName lastName email subscribedToUserIds }
       profiles { id userId memberTypeId avatar sex birthday country street city }
       posts { id userId title content }
       memberTypes { id discount monthPostsLimit }
-     }
+      }
      ```
 
      2.2. Get user, profile, post, memberType by id - 4 operations in one query.
 
      ```
-     {
+      query ex2_2 {
       user (id: "uuid") { id firstName lastName email subscribedToUserIds }
       profile (id: "uuid") { id userId memberTypeId avatar sex birthday country street city }
       post (id: "uuid") { id userId title content }
       memberType (id: "basic") { id discount monthPostsLimit }
-     }
+      }
      ```
 
      2.3. Get users with their posts, profiles, memberTypes.  
@@ -42,7 +42,16 @@
      2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
 
    - Create gql requests:  
-     2.8. Create user.  
+     2.8. Create user.
+     ```
+      mutation ex2_8 {
+      createUser (
+         firstName: "firstName1",
+         lastName: "lastName1",
+         email: "email1"
+      ) { id firstName lastName email subscribedToUserIds }
+      }
+     ```
      2.9. Create profile.  
      2.10. Create post.  
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
