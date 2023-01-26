@@ -1,13 +1,15 @@
 import { GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
+import { CreatePostDTO } from '../../../utils/DB/entities/DBPosts';
 import { CreateProfileDTO } from '../../../utils/DB/entities/DBProfiles';
 import { CreateUserDTO } from '../../../utils/DB/entities/DBUsers';
 import { FastifyType } from './fastify-type';
 // import { memberTypeType } from './member-type-type';
-// import { postType } from './post-type';
+import { postType } from './post-type';
 import { profileType } from './profile-type';
 import { userType } from './user-type';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
+import * as postsController from '../../utils/posts-controller';
 
 export const getMutationType = (fastify: FastifyType) => ({
   name: 'RootMutationType',
@@ -37,6 +39,17 @@ export const getMutationType = (fastify: FastifyType) => ({
       },
       resolve: (_: any, createProfileDTO: CreateProfileDTO) =>
         profilesController.create(fastify, createProfileDTO),
+    },
+
+    createPost: {
+      type: postType,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        content: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_: any, createPostDTO: CreatePostDTO) =>
+        postsController.create(fastify, createPostDTO),
     },
   }),
 });

@@ -67,7 +67,16 @@
       ) { id userId memberTypeId avatar sex birthday country street city }
       }
      ```
-     2.10. Create post.  
+     2.10. Create post.
+     ```
+      mutation ex2_10 {
+      createPost (
+         userId: "uuid",
+         title: "title",
+         content: "content content content"
+      ) { id userId title content }
+      }
+     ```
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
    - Update gql requests:  
      2.12. Update user.  
