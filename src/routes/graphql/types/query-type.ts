@@ -1,5 +1,4 @@
 import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
-import { RoutesErrors } from '../../utils/routes-errors';
 import { FastifyType } from './fastify-type';
 import { memberTypeType } from './member-type-type';
 import { postType } from './post-type';
@@ -7,6 +6,8 @@ import { profileType } from './profile-type';
 import { userType } from './user-type';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
+import * as postsController from '../../utils/posts-controller';
+import * as memberTypeController from '../../utils/member-type-controller';
 
 export const getQueryType = (fastify: FastifyType) => ({
   name: 'RootQueryType',
@@ -23,12 +24,12 @@ export const getQueryType = (fastify: FastifyType) => ({
 
     posts: {
       type: new GraphQLList(postType),
-      resolve: () => fastify.db.posts.findMany(),
+      resolve: () => postsController.findMany(fastify),
     },
 
     memberTypes: {
       type: new GraphQLList(memberTypeType),
-      resolve: () => fastify.db.memberTypes.findMany(),
+      resolve: () => memberTypeController.findMany(fastify),
     },
 
     user: {
@@ -61,12 +62,7 @@ export const getQueryType = (fastify: FastifyType) => ({
           type: new GraphQLNonNull(GraphQLString),
         },
       },
-      resolve: async (_: any, { id }: any) => {
-        const found = await fastify.db.posts.findOne({ key: 'id', equals: id });
-        if (!found) throw fastify.httpErrors.notFound(RoutesErrors.postNotFound);
-
-        return found;
-      },
+      resolve: async (_: any, { id }: any) => postsController.findOne(fastify, id),
     },
 
     memberType: {
@@ -77,12 +73,7 @@ export const getQueryType = (fastify: FastifyType) => ({
           type: new GraphQLNonNull(GraphQLString),
         },
       },
-      resolve: async (_: any, { id }: any) => {
-        const found = await fastify.db.memberTypes.findOne({ key: 'id', equals: id });
-        if (!found) throw fastify.httpErrors.notFound(RoutesErrors.memberTypeNotFound);
-
-        return found;
-      },
+      resolve: async (_: any, { id }: any) => memberTypeController.findOne(fastify, id),
     },
   }),
 });
