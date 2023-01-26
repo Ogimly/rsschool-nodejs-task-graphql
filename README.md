@@ -27,12 +27,18 @@
      2.2. Get user, profile, post, memberType by id - 4 operations in one query.
 
      ```
-      query ex2_2 {
-      user (id: "uuid") { id firstName lastName email subscribedToUserIds }
-      profile (id: "uuid") { id userId memberTypeId avatar sex birthday country street city }
-      post (id: "uuid") { id userId title content }
-      memberType (id: "basic") { id discount monthPostsLimit }
-      }
+     query ex2_2 ($userId: ID!, $profileId: ID!, $postId: ID!, $memberTypeId: String!) {
+       user (id: $userId) { id firstName lastName email subscribedToUserIds }
+       profile (id: $profileId) { id userId memberTypeId avatar sex birthday country street city }
+       post (id: $postId) { id userId title content }
+       memberType (id: $memberTypeId) { id discount monthPostsLimit }
+     }
+     {
+       "userId": "uuid",
+       "profileId": "uuid",
+       "postId": "uuid",
+       "memberTypeId": "basic"
+     }
      ```
 
      2.3. Get users with their posts, profiles, memberTypes.  
@@ -44,91 +50,105 @@
    - Create gql requests:  
      2.8. Create user.
      ```
-     mutation ex2_8 {
-       createUser (
-         createUserDTO: {
-           firstName: "firstName1",
-           lastName: "lastName1",
-           email: "email1"
-         }
-       ) { id firstName lastName email subscribedToUserIds }
+     mutation ex2_8 ($createUserDTO: userCreateType!) {
+       createUser ( createUserDTO: $createUserDTO )
+         { id firstName lastName email subscribedToUserIds }
+     }
+     {
+       "createUserDTO": {
+         "firstName": "firstName1",
+         "lastName": "lastName1",
+         "email": "email1"
+       }
      }
      ```
      2.9. Create profile.
      ```
-     mutation ex2_9 {
-       createProfile (
-         createProfileDTO: {
-           userId: "uuid",
-           memberTypeId: "basic",
-           avatar: "avatar",
-           sex: "sex",
-           birthday: 222222222,
-           country: "country",
-           street: "street",
-           city: "city"
-         }
-       ) { id userId memberTypeId avatar sex birthday country street city }
+     mutation ex2_9 ($createProfileDTO: profileCreateType!) {
+       createProfile ( createProfileDTO: $createProfileDTO )
+         { id userId memberTypeId avatar sex birthday country street city }
+     }
+     {
+       "createProfileDTO": {
+         "userId": "uuid",
+         "memberTypeId": "basic",
+         "avatar": "avatar",
+         "sex": "sex",
+         "birthday": 222222222,
+         "country": "country",
+         "street": "street",
+         "city": "city"
+       }
      }
      ```
      2.10. Create post.
      ```
-     mutation ex2_10 {
-       createPost (
-         createPostDTO: {
-           userId: "uuid",
-           title: "title",
-           content: "content content content"
-         }
-       ) { id userId title content }
+     mutation ex2_10 ($createPostDTO: postCreateType!) {
+       createPost ( createPostDTO: $createPostDTO )
+         { id userId title content }
+     }
+     {
+       "createPostDTO": {
+         "userId": "uuid",
+         "title": "title",
+         "content": "content content content"
+       }
      }
      ```
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
    - Update gql requests:  
      2.12. Update user.
      ```
-     mutation ex2_12 {
-       updateUser (
-         id : "uuid",
-         updateUserDTO: {
-           email: "email2"
-         }
-       ) { id firstName lastName email subscribedToUserIds }
+     mutation ex2_12 ($id:ID!, $updateUserDTO: userUpdateType!) {
+       updateUser ( id: $id, updateUserDTO: $updateUserDTO )
+         { id firstName lastName email subscribedToUserIds }
+     }
+     {
+       "id": "uuid",
+       "updateUserDTO": {
+         "email": "email2",
+       }
      }
      ```
      2.13. Update profile.
      ```
-     mutation ex2_13 {
-       updateProfile (
-         id : "uuid",
-         updateProfileDTO: {
-           country: "new country",
-           street: "new street",
-           city: "new city"
-         }
-       ) { id userId memberTypeId avatar sex birthday country street city }
+     mutation ex2_13 ($id:ID!, $updateProfileDTO: profileUpdateType!) {
+       updateProfile ( id :$id, updateProfileDTO: $updateProfileDTO )
+         { id userId memberTypeId avatar sex birthday country street city }
+     }
+     {
+       "id": "uuid",
+       "updateProfileDTO": {
+         "country": "new country",
+         "street": "new street",
+         "city": "new city"
+       }
      }
      ```
      2.14. Update post.
      ```
-     mutation ex2_14 {
-       updatePost (
-         id : "uuid",
-         updatePostDTO: {
-           title: "new title",
-         }
-       ) { id userId title content }
+     mutation ex2_14 ($id:ID!, $updatePostDTO: postUpdateType ) {
+       updatePost ( id: $id, updatePostDTO: $updatePostDTO )
+         { id userId title content }
+     }
+     {
+       "id": "uuid",
+       "updatePostDTO": {
+         "title": "new title"
+       }
      }
      ```
      2.15. Update memberType.
      ```
-     mutation ex2_15 {
-       updateMemberType (
-         id : "basic",
-         updateMemberTypeDTO: {
-           discount: 3,
-         }
-       ) { id discount monthPostsLimit }
+     mutation ex2_15 ($id:String!, $updateMemberTypeDTO: memberTypeUpdateType!) {
+       updateMemberType ( id: $id, updateMemberTypeDTO: $updateMemberTypeDTO )
+         { id discount monthPostsLimit }
+     }
+     {
+       "id": "basic",
+       "updateMemberTypeDTO": {
+         "discount": 3
+       }
      }
      ```
      2.16. Subscribe to; unsubscribe from.  

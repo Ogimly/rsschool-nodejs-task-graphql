@@ -18,14 +18,22 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       },
     },
     async function (request, reply) {
-      const { query, mutation } = request.body;
+      const { query, mutation, variables } = request.body;
 
       if (query) {
-        return await graphql({ schema: graphqlQuerySchema, source: query });
+        return await graphql({
+          schema: graphqlQuerySchema,
+          source: query,
+          variableValues: variables,
+        });
       }
 
       if (mutation) {
-        return await graphql({ schema: graphqlQuerySchema, source: mutation });
+        return await graphql({
+          schema: graphqlQuerySchema,
+          source: mutation,
+          variableValues: variables,
+        });
       }
 
       return 'Request is empty';
