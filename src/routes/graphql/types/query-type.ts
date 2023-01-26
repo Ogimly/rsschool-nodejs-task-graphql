@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLList } from 'graphql';
 import { FastifyType } from './fastify-type';
 import { memberTypeType } from './member-type-type';
 import { postType } from './post-type';
@@ -8,6 +8,7 @@ import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
+import { idType, uuidType } from './reused-types';
 
 export const getQueryType = (fastify: FastifyType) => ({
   name: 'RootQueryType',
@@ -35,10 +36,7 @@ export const getQueryType = (fastify: FastifyType) => ({
     user: {
       type: userType,
       args: {
-        id: {
-          description: 'id of the human',
-          type: new GraphQLNonNull(GraphQLString),
-        },
+        id: uuidType,
       },
       resolve: async (_: any, { id }: any) => usersController.findOne(fastify, id),
     },
@@ -46,10 +44,7 @@ export const getQueryType = (fastify: FastifyType) => ({
     profile: {
       type: profileType,
       args: {
-        id: {
-          description: 'id of the Profile',
-          type: new GraphQLNonNull(GraphQLString),
-        },
+        id: uuidType,
       },
       resolve: async (_: any, { id }: any) => profilesController.findOne(fastify, id),
     },
@@ -57,10 +52,7 @@ export const getQueryType = (fastify: FastifyType) => ({
     post: {
       type: postType,
       args: {
-        id: {
-          description: 'id of the Post',
-          type: new GraphQLNonNull(GraphQLString),
-        },
+        id: uuidType,
       },
       resolve: async (_: any, { id }: any) => postsController.findOne(fastify, id),
     },
@@ -68,10 +60,7 @@ export const getQueryType = (fastify: FastifyType) => ({
     memberType: {
       type: memberTypeType,
       args: {
-        id: {
-          description: 'id of the Member Type',
-          type: new GraphQLNonNull(GraphQLString),
-        },
+        id: idType,
       },
       resolve: async (_: any, { id }: any) => memberTypeController.findOne(fastify, id),
     },
