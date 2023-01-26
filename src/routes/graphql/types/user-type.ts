@@ -49,6 +49,9 @@ export const userUpdateType = {
       firstName: { type: GraphQLString },
       lastName: { type: GraphQLString },
       email: { type: GraphQLString },
+      subscribedToUserIds: {
+        type: new GraphQLList(GraphQLString),
+      },
     }),
   }),
 };
