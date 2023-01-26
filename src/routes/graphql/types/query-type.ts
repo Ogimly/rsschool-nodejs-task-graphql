@@ -6,6 +6,7 @@ import { postType } from './post-type';
 import { profileType } from './profile-type';
 import { userType } from './user-type';
 import * as usersController from '../../utils/users-controller';
+import * as profilesController from '../../utils/profiles-controller';
 
 export const getQueryType = (fastify: FastifyType) => ({
   name: 'RootQueryType',
@@ -17,7 +18,7 @@ export const getQueryType = (fastify: FastifyType) => ({
 
     profiles: {
       type: new GraphQLList(profileType),
-      resolve: () => fastify.db.profiles.findMany(),
+      resolve: () => profilesController.findMany(fastify),
     },
 
     posts: {
@@ -49,12 +50,7 @@ export const getQueryType = (fastify: FastifyType) => ({
           type: new GraphQLNonNull(GraphQLString),
         },
       },
-      resolve: async (_: any, { id }: any) => {
-        const found = await fastify.db.profiles.findOne({ key: 'id', equals: id });
-        if (!found) throw fastify.httpErrors.notFound(RoutesErrors.profileNotFound);
-
-        return found;
-      },
+      resolve: async (_: any, { id }: any) => profilesController.findOne(fastify, id),
     },
 
     post: {
