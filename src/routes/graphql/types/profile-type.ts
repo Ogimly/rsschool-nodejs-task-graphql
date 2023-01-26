@@ -59,3 +59,18 @@ export const profileCreateType = {
     }),
   }),
 };
+
+export const profileUpdateType = {
+  type: new GraphQLInputObjectType({
+    name: 'profileUpdateType',
+    fields: () => ({
+      memberTypeId: { type: GraphQLString },
+      avatar: { type: GraphQLString },
+      sex: { type: GraphQLString },
+      birthday: { type: GraphQLInt },
+      country: { type: GraphQLString },
+      street: { type: GraphQLString },
+      city: { type: GraphQLString },
+    }),
+  }),
+};

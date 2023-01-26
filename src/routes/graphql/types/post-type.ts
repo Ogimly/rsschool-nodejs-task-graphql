@@ -36,3 +36,13 @@ export const postCreateType = {
     }),
   }),
 };
+
+export const postUpdateType = {
+  type: new GraphQLInputObjectType({
+    name: 'postUpdateType',
+    fields: () => ({
+      title: { type: GraphQLString },
+      content: { type: GraphQLString },
+    }),
+  }),
+};

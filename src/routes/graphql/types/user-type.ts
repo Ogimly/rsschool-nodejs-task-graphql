@@ -46,9 +46,9 @@ export const userUpdateType = {
   type: new GraphQLInputObjectType({
     name: 'userUpdateType',
     fields: () => ({
-      firstName: { type: new GraphQLNonNull(GraphQLString) },
-      lastName: { type: new GraphQLNonNull(GraphQLString) },
-      email: { type: new GraphQLNonNull(GraphQLString) },
+      firstName: { type: GraphQLString },
+      lastName: { type: GraphQLString },
+      email: { type: GraphQLString },
     }),
   }),
 };

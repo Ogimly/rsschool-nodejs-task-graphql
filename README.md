@@ -89,18 +89,48 @@
      ```
      mutation ex2_12 {
        updateUser (
-         id : "e6ff2e47-8fc1-45bd-bcfb-6e5b85b26a25",
+         id : "uuid",
          updateUserDTO: {
-           firstName: "firstName2",
-           lastName: "lastName2",
            email: "email2"
          }
        ) { id firstName lastName email subscribedToUserIds }
      }
      ```
-     2.13. Update profile.  
-     2.14. Update post.  
-     2.15. Update memberType.  
+     2.13. Update profile.
+     ```
+     mutation ex2_13 {
+       updateProfile (
+         id : "uuid",
+         updateProfileDTO: {
+           country: "new country",
+           street: "new street",
+           city: "new city"
+         }
+       ) { id userId memberTypeId avatar sex birthday country street city }
+     }
+     ```
+     2.14. Update post.
+     ```
+     mutation ex2_14 {
+       updatePost (
+         id : "uuid",
+         updatePostDTO: {
+           title: "new title",
+         }
+       ) { id userId title content }
+     }
+     ```
+     2.15. Update memberType.
+     ```
+     mutation ex2_15 {
+       updateMemberType (
+         id : "basic",
+         updateMemberTypeDTO: {
+           discount: 3,
+         }
+       ) { id discount monthPostsLimit }
+     }
+     ```
      2.16. Subscribe to; unsubscribe from.  
      2.17. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
 
