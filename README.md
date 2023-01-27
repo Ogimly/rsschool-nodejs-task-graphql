@@ -98,6 +98,7 @@
      2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
    - Update gql requests:  
      2.12. Update user.
+
      ```
      mutation ex2_12 ($id:ID!, $updateUserDTO: userUpdateType!) {
        updateUser ( id: $id, updateUserDTO: $updateUserDTO )
@@ -110,7 +111,9 @@
        }
      }
      ```
+
      2.13. Update profile.
+
      ```
      mutation ex2_13 ($id:ID!, $updateProfileDTO: profileUpdateType!) {
        updateProfile ( id :$id, updateProfileDTO: $updateProfileDTO )
@@ -125,7 +128,9 @@
        }
      }
      ```
+
      2.14. Update post.
+
      ```
      mutation ex2_14 ($id:ID!, $updatePostDTO: postUpdateType ) {
        updatePost ( id: $id, updatePostDTO: $updatePostDTO )
@@ -138,7 +143,9 @@
        }
      }
      ```
+
      2.15. Update memberType.
+
      ```
      mutation ex2_15 ($id:String!, $updateMemberTypeDTO: memberTypeUpdateType!) {
        updateMemberType ( id: $id, updateMemberTypeDTO: $updateMemberTypeDTO )
@@ -151,7 +158,29 @@
        }
      }
      ```
-     2.16. Subscribe to; unsubscribe from.  
+
+     2.16. Subscribe to; unsubscribe from.
+
+     ```
+     mutation ex2_16_1 ($id:ID!, $idForSubscribe: ID!) {
+       subscribeTo ( id: $id, idForSubscribe: $idForSubscribe )
+         { id firstName lastName email subscribedToUserIds }
+     }
+     {
+       "id": "uuid",
+       "idForSubscribe": "uuid"
+     }
+
+     mutation ex2_16_2 ($id:ID!, $idForUnsubscribe: ID!) {
+       unsubscribeFrom ( id: $id, idForUnsubscribe: $idForUnsubscribe )
+         { id firstName lastName email subscribedToUserIds }
+     }
+     {
+       "id": "uuid",
+       "idForUnsubscribe": "uuid"
+     }
+     ```
+
      2.17. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.
 
 3. Solve `n+1` graphql problem with [dataloader](https://www.npmjs.com/package/dataloader) package in all places where it should be used.  

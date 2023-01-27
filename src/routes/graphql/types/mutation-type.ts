@@ -78,5 +78,25 @@ export const getMutationType = (fastify: FastifyType) => ({
       resolve: (_: any, { id, updateMemberTypeDTO }: any) =>
         memberTypeController.update(fastify, id, updateMemberTypeDTO),
     },
+
+    subscribeTo: {
+      type: userType,
+      args: {
+        id: uuidType,
+        idForSubscribe: uuidType,
+      },
+      resolve: (_: any, { id, idForSubscribe }: any) =>
+        usersController.subscribe(fastify, id, idForSubscribe),
+    },
+
+    unsubscribeFrom: {
+      type: userType,
+      args: {
+        id: uuidType,
+        idForUnsubscribe: uuidType,
+      },
+      resolve: (_: any, { id, idForUnsubscribe }: any) =>
+        usersController.unsubscribe(fastify, id, idForUnsubscribe),
+    },
   }),
 });
