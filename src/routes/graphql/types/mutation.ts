@@ -1,4 +1,3 @@
-import { FastifyType } from './fastify';
 import { idType, uuidType } from './reused';
 import { memberTypeType, memberTypeUpdateType } from './db/member-type';
 import { postCreateType, postType, postUpdateType } from './db/post';
@@ -8,8 +7,9 @@ import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
+import { FastifyInstance } from 'fastify';
 
-export const getMutationType = (fastify: FastifyType) => ({
+export const getMutationType = (fastify: FastifyInstance) => ({
   name: 'RootMutationType',
   fields: () => ({
     createUser: {

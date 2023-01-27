@@ -1,20 +1,24 @@
+import { FastifyInstance } from 'fastify';
 import { CreateUserDTO, ChangeUserDTO } from '../../utils/DB/entities/DBUsers';
-import { FastifyType } from '../graphql/types/fastify';
 import { RoutesErrors } from './routes-errors';
 
-export const findMany = (fastify: FastifyType) => fastify.db.users.findMany();
+export const findMany = (fastify: FastifyInstance) => fastify.db.users.findMany();
 
-export const findOne = async (fastify: FastifyType, id: string) => {
+export const findOne = async (fastify: FastifyInstance, id: string) => {
   const found = await fastify.db.users.findOne({ key: 'id', equals: id });
   if (!found) throw fastify.httpErrors.notFound(RoutesErrors.userNotFound);
 
   return found;
 };
 
-export const create = (fastify: FastifyType, body: CreateUserDTO) =>
+export const create = (fastify: FastifyInstance, body: CreateUserDTO) =>
   fastify.db.users.create(body);
 
-export const update = async (fastify: FastifyType, id: string, body: ChangeUserDTO) => {
+export const update = async (
+  fastify: FastifyInstance,
+  id: string,
+  body: ChangeUserDTO
+) => {
   const found = await fastify.db.users.findOne({ key: 'id', equals: id });
   if (!found) throw fastify.httpErrors.badRequest(RoutesErrors.userNotFound);
 
@@ -22,7 +26,7 @@ export const update = async (fastify: FastifyType, id: string, body: ChangeUserD
 };
 
 export const subscribe = async (
-  fastify: FastifyType,
+  fastify: FastifyInstance,
   userId: string,
   idToSubscribe: string
 ) => {
@@ -38,7 +42,7 @@ export const subscribe = async (
 };
 
 export const unsubscribe = async (
-  fastify: FastifyType,
+  fastify: FastifyInstance,
   userId: string,
   idToUnsubscribe: string
 ) => {
@@ -55,7 +59,7 @@ export const unsubscribe = async (
   return fastify.db.users.change(userId, { subscribedToUserIds });
 };
 
-export const deleteOne = async (fastify: FastifyType, id: string) => {
+export const deleteOne = async (fastify: FastifyInstance, id: string) => {
   const found = await fastify.db.users.findOne({ key: 'id', equals: id });
   if (!found) throw fastify.httpErrors.badRequest(RoutesErrors.userNotFound);
 
