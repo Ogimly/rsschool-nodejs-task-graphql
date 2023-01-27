@@ -1,5 +1,5 @@
 import { ChangeProfileDTO, CreateProfileDTO } from '../../utils/DB/entities/DBProfiles';
-import { FastifyType } from '../graphql/types/fastify-type';
+import { FastifyType } from '../graphql/types/fastify';
 import { RoutesErrors } from './routes-errors';
 
 export const findMany = (fastify: FastifyType) => fastify.db.profiles.findMany();

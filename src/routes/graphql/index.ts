@@ -1,8 +1,8 @@
 import { FastifyPluginAsyncJsonSchemaToTs } from '@fastify/type-provider-json-schema-to-ts';
 import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { graphqlBodySchema } from './schema';
-import { getMutationType } from './types/mutation-type';
-import { getQueryType } from './types/query-type';
+import { getMutationType } from './types/mutation';
+import { getQueryType } from './types/query';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   const graphqlQuerySchema = new GraphQLSchema({

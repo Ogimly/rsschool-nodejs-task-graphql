@@ -1,5 +1,5 @@
 import { CreateUserDTO, ChangeUserDTO } from '../../utils/DB/entities/DBUsers';
-import { FastifyType } from '../graphql/types/fastify-type';
+import { FastifyType } from '../graphql/types/fastify';
 import { RoutesErrors } from './routes-errors';
 
 export const findMany = (fastify: FastifyType) => fastify.db.users.findMany();

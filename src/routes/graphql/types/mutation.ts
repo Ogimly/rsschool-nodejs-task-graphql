@@ -1,9 +1,9 @@
-import { FastifyType } from './fastify-type';
-import { idType, uuidType } from './reused-types';
-import { memberTypeType, memberTypeUpdateType } from './member-type-type';
-import { postCreateType, postType, postUpdateType } from './post-type';
-import { profileCreateType, profileType, profileUpdateType } from './profile-type';
-import { userCreateType, userType, userUpdateType } from './user-type';
+import { FastifyType } from './fastify';
+import { idType, uuidType } from './reused';
+import { memberTypeType, memberTypeUpdateType } from './db/member-type';
+import { postCreateType, postType, postUpdateType } from './db/post';
+import { profileCreateType, profileType, profileUpdateType } from './db/profile';
+import { userCreateType, userType, userUpdateType } from './db/user';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';

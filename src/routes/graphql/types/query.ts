@@ -1,14 +1,14 @@
 import { GraphQLList } from 'graphql';
-import { FastifyType } from './fastify-type';
-import { memberTypeType } from './member-type-type';
-import { postType } from './post-type';
-import { profileType } from './profile-type';
-import { userType } from './user-type';
+import { FastifyType } from './fastify';
+import { memberTypeType } from './db/member-type';
+import { postType } from './db/post';
+import { profileType } from './db/profile';
+import { userType } from './db/user';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
-import { idType, uuidType } from './reused-types';
+import { idType, uuidType } from './reused';
 
 export const getQueryType = (fastify: FastifyType) => ({
   name: 'RootQueryType',

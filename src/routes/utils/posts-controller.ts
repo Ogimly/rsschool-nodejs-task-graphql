@@ -1,5 +1,5 @@
 import { CreatePostDTO, ChangePostDTO } from '../../utils/DB/entities/DBPosts';
-import { FastifyType } from '../graphql/types/fastify-type';
+import { FastifyType } from '../graphql/types/fastify';
 import { RoutesErrors } from './routes-errors';
 
 export const findMany = (fastify: FastifyType) => fastify.db.posts.findMany();
