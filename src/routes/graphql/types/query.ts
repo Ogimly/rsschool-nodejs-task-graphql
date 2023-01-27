@@ -1,4 +1,4 @@
-import { GraphQLList } from 'graphql';
+import { GraphQLList, GraphQLObjectType } from 'graphql';
 import { memberTypeType } from './db/member-type';
 import { postType } from './db/post';
 import { profileType } from './db/profile';
@@ -10,27 +10,31 @@ import * as memberTypeController from '../../utils/member-type-controller';
 import { idType, uuidType } from './reused';
 import { FastifyInstance } from 'fastify';
 
-export const getQueryType = (fastify: FastifyInstance) => ({
+export const QueryType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: () => ({
     users: {
       type: new GraphQLList(userType),
-      resolve: () => usersController.findMany(fastify),
+      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        usersController.findMany(fastify),
     },
 
     profiles: {
       type: new GraphQLList(profileType),
-      resolve: () => profilesController.findMany(fastify),
+      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        profilesController.findMany(fastify),
     },
 
     posts: {
       type: new GraphQLList(postType),
-      resolve: () => postsController.findMany(fastify),
+      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        postsController.findMany(fastify),
     },
 
     memberTypes: {
       type: new GraphQLList(memberTypeType),
-      resolve: () => memberTypeController.findMany(fastify),
+      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        memberTypeController.findMany(fastify),
     },
 
     user: {
@@ -38,7 +42,8 @@ export const getQueryType = (fastify: FastifyInstance) => ({
       args: {
         id: uuidType,
       },
-      resolve: async (_: any, { id }: any) => usersController.findOne(fastify, id),
+      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+        usersController.findOne(fastify, id),
     },
 
     profile: {
@@ -46,7 +51,8 @@ export const getQueryType = (fastify: FastifyInstance) => ({
       args: {
         id: uuidType,
       },
-      resolve: async (_: any, { id }: any) => profilesController.findOne(fastify, id),
+      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+        profilesController.findOne(fastify, id),
     },
 
     post: {
@@ -54,7 +60,8 @@ export const getQueryType = (fastify: FastifyInstance) => ({
       args: {
         id: uuidType,
       },
-      resolve: async (_: any, { id }: any) => postsController.findOne(fastify, id),
+      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+        postsController.findOne(fastify, id),
     },
 
     memberType: {
@@ -62,7 +69,8 @@ export const getQueryType = (fastify: FastifyInstance) => ({
       args: {
         id: idType,
       },
-      resolve: async (_: any, { id }: any) => memberTypeController.findOne(fastify, id),
+      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+        memberTypeController.findOne(fastify, id),
     },
   }),
 });

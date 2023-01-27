@@ -8,8 +8,9 @@ import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
 import { FastifyInstance } from 'fastify';
+import { GraphQLObjectType } from 'graphql';
 
-export const getMutationType = (fastify: FastifyInstance) => ({
+export const MutationType = new GraphQLObjectType({
   name: 'RootMutationType',
   fields: () => ({
     createUser: {
@@ -17,7 +18,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
       args: {
         createUserDTO: userCreateType,
       },
-      resolve: (_: any, { createUserDTO }: any) =>
+      resolve: (_: unknown, { createUserDTO }: any, fastify: FastifyInstance) =>
         usersController.create(fastify, createUserDTO),
     },
 
@@ -26,7 +27,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
       args: {
         createProfileDTO: profileCreateType,
       },
-      resolve: (_: any, { createProfileDTO }: any) =>
+      resolve: (_: unknown, { createProfileDTO }: any, fastify: FastifyInstance) =>
         profilesController.create(fastify, createProfileDTO),
     },
 
@@ -35,7 +36,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
       args: {
         createPostDTO: postCreateType,
       },
-      resolve: (_: any, { createPostDTO }: any) =>
+      resolve: (_: unknown, { createPostDTO }: any, fastify: FastifyInstance) =>
         postsController.create(fastify, createPostDTO),
     },
 
@@ -45,7 +46,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
         id: uuidType,
         updateUserDTO: userUpdateType,
       },
-      resolve: (_: any, { id, updateUserDTO }: any) =>
+      resolve: (_: unknown, { id, updateUserDTO }: any, fastify: FastifyInstance) =>
         usersController.update(fastify, id, updateUserDTO),
     },
 
@@ -55,7 +56,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
         id: uuidType,
         updateProfileDTO: profileUpdateType,
       },
-      resolve: (_: any, { id, updateProfileDTO }: any) =>
+      resolve: (_: unknown, { id, updateProfileDTO }: any, fastify: FastifyInstance) =>
         profilesController.update(fastify, id, updateProfileDTO),
     },
 
@@ -65,7 +66,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
         id: uuidType,
         updatePostDTO: postUpdateType,
       },
-      resolve: (_: any, { id, updatePostDTO }: any) =>
+      resolve: (_: unknown, { id, updatePostDTO }: any, fastify: FastifyInstance) =>
         postsController.update(fastify, id, updatePostDTO),
     },
 
@@ -75,7 +76,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
         id: idType,
         updateMemberTypeDTO: memberTypeUpdateType,
       },
-      resolve: (_: any, { id, updateMemberTypeDTO }: any) =>
+      resolve: (_: unknown, { id, updateMemberTypeDTO }: any, fastify: FastifyInstance) =>
         memberTypeController.update(fastify, id, updateMemberTypeDTO),
     },
 
@@ -85,7 +86,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
         id: uuidType,
         idForSubscribe: uuidType,
       },
-      resolve: (_: any, { id, idForSubscribe }: any) =>
+      resolve: (_: unknown, { id, idForSubscribe }: any, fastify: FastifyInstance) =>
         usersController.subscribe(fastify, id, idForSubscribe),
     },
 
@@ -95,7 +96,7 @@ export const getMutationType = (fastify: FastifyInstance) => ({
         id: uuidType,
         idForUnsubscribe: uuidType,
       },
-      resolve: (_: any, { id, idForUnsubscribe }: any) =>
+      resolve: (_: unknown, { id, idForUnsubscribe }: any, fastify: FastifyInstance) =>
         usersController.unsubscribe(fastify, id, idForUnsubscribe),
     },
   }),

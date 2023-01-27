@@ -1,13 +1,13 @@
 import { FastifyPluginAsyncJsonSchemaToTs } from '@fastify/type-provider-json-schema-to-ts';
-import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { graphql, GraphQLSchema } from 'graphql';
 import { graphqlBodySchema } from './schema';
-import { getMutationType } from './types/mutation';
-import { getQueryType } from './types/query';
+import { MutationType } from './types/mutation';
+import { QueryType } from './types/query';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   const graphqlQuerySchema = new GraphQLSchema({
-    query: new GraphQLObjectType(getQueryType(fastify)),
-    mutation: new GraphQLObjectType(getMutationType(fastify)),
+    query: QueryType,
+    mutation: MutationType,
   });
 
   fastify.post(
@@ -25,6 +25,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
           schema: graphqlQuerySchema,
           source: query,
           variableValues: variables,
+          contextValue: fastify,
         });
       }
 
@@ -33,6 +34,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
           schema: graphqlQuerySchema,
           source: mutation,
           variableValues: variables,
+          contextValue: fastify,
         });
       }
 
