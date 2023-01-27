@@ -42,7 +42,22 @@
      ```
 
      2.3. Get users with their posts, profiles, memberTypes.  
-     2.4. Get user by id with his posts, profile, memberType.  
+     2.4. Get user by id with his posts, profile, memberType.
+
+     ```
+     query ex2_4 ($userId: ID!) {
+       userWithAllEntities (id: $userId) {
+         user { id firstName lastName email subscribedToUserIds }
+         profile { id userId memberTypeId avatar sex birthday country street city }
+         posts { id userId title content }
+         memberType { id discount monthPostsLimit }
+       }
+     }
+     {
+       "userId": "04bc3826-013e-4f40-8715-92f015a27b17"
+     }
+     ```
+
      2.5. Get users with their `userSubscribedTo`, profile.  
      2.6. Get user by id with his `subscribedToUser`, posts.  
      2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
