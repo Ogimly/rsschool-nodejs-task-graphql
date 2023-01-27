@@ -16,12 +16,12 @@
      2.1. Get users, profiles, posts, memberTypes - 4 operations in one query.
 
      ```
-      query ex2_1 {
-      users { id firstName lastName email subscribedToUserIds }
-      profiles { id userId memberTypeId avatar sex birthday country street city }
-      posts { id userId title content }
-      memberTypes { id discount monthPostsLimit }
-      }
+     query ex2_1 {
+       users { id firstName lastName email subscribedToUserIds }
+       profiles { id userId memberTypeId avatar sex birthday country street city }
+       posts { id userId title content }
+       memberTypes { id discount monthPostsLimit }
+     }
      ```
 
      2.2. Get user, profile, post, memberType by id - 4 operations in one query.
@@ -41,7 +41,19 @@
      }
      ```
 
-     2.3. Get users with their posts, profiles, memberTypes.  
+     2.3. Get users with their posts, profiles, memberTypes.
+
+     ```
+     query ex2_3 {
+       usersWithAllEntities {
+         user { id firstName lastName email subscribedToUserIds }
+         profile { id userId memberTypeId avatar sex birthday country street city }
+         posts { id userId title content }
+         memberType { id discount monthPostsLimit }
+       }
+     }
+     ```
+
      2.4. Get user by id with his posts, profile, memberType.
 
      ```
@@ -54,7 +66,7 @@
        }
      }
      {
-       "userId": "04bc3826-013e-4f40-8715-92f015a27b17"
+       "userId": "uuid"
      }
      ```
 

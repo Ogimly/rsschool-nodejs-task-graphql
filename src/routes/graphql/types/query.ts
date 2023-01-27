@@ -74,6 +74,12 @@ export const QueryType = new GraphQLObjectType({
         memberTypeController.findOne(fastify, id),
     },
 
+    usersWithAllEntities: {
+      type: new GraphQLList(userWithAllEntitiesType),
+      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        usersController.findMany(fastify),
+    },
+
     userWithAllEntities: {
       type: userWithAllEntitiesType,
       args: {
