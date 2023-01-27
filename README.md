@@ -74,9 +74,9 @@
 
      ```
      query ex2_5 {
-       usersWithSubscribedToFullProfile {
+       usersWithUserSubscribedTo {
          user { id firstName lastName email subscribedToUserIds }
-         subscribedTo {
+         userSubscribedTo {
            user { id firstName lastName email }
            profile { id userId memberTypeId avatar sex birthday country street city }
          }
@@ -88,9 +88,9 @@
 
      ```
      query ex2_5 {
-       usersWithSubscribedToFullProfile {
+       usersWithUserSubscribedTo {
          user { id firstName lastName email subscribedToUserIds }
-         subscribedTo {
+         userSubscribedTo {
            userFullProfile {
              id firstName lastName email
              profile { id userId memberTypeId avatar sex birthday country street city }

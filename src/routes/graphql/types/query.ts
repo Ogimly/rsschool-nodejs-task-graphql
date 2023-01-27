@@ -10,8 +10,8 @@ import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
-import { userWithFullProfileType } from './db/user-profile';
-import { userWithSubscribedToFullProfile } from './db/user-subscribed-to';
+import { userWithFullProfileType } from './db/user-full-profile';
+import { userWithUserSubscribedTo } from './db/user-subscribed-to';
 
 export const QueryType = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -106,19 +106,28 @@ export const QueryType = new GraphQLObjectType({
         usersController.findOne(fastify, id),
     },
 
-    usersWithSubscribedToFullProfile: {
-      type: new GraphQLList(userWithSubscribedToFullProfile),
+    usersWithUserSubscribedTo: {
+      type: new GraphQLList(userWithUserSubscribedTo),
       resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
         usersController.findMany(fastify),
     },
 
-    userWithSubscribedToFullProfile: {
-      type: userWithSubscribedToFullProfile,
+    userWithUserSubscribedTo: {
+      type: userWithUserSubscribedTo,
       args: {
         id: uuidType,
       },
       resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
         usersController.findOne(fastify, id),
     },
+
+    // userWithSubscribedToFullProfile: {
+    //   type: userWithSubscribedToFullProfile,
+    //   args: {
+    //     id: uuidType,
+    //   },
+    //   resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+    //     usersController.findOne(fastify, id),
+    // },
   }),
 });
