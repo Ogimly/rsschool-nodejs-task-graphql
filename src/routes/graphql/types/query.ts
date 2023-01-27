@@ -1,14 +1,15 @@
 import { GraphQLList, GraphQLObjectType } from 'graphql';
-import { memberTypeType } from './db/member-type';
-import { postType } from './db/post';
-import { profileType } from './db/profile';
+import { FastifyInstance } from 'fastify';
+import { idType, uuidType } from './reused';
 import { userType } from './db/user';
+import { userWithAllEntitiesType } from './db/user-all-entities';
+import { profileType } from './db/profile';
+import { postType } from './db/post';
+import { memberTypeType } from './db/member-type';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
-import { idType, uuidType } from './reused';
-import { FastifyInstance } from 'fastify';
 
 export const QueryType = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -71,6 +72,15 @@ export const QueryType = new GraphQLObjectType({
       },
       resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
         memberTypeController.findOne(fastify, id),
+    },
+
+    userWithAllEntities: {
+      type: userWithAllEntitiesType,
+      args: {
+        id: uuidType,
+      },
+      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+        usersController.findOne(fastify, id),
     },
   }),
 });

@@ -17,7 +17,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
         params: idParamSchema,
       },
     },
-    async (request): Promise<MemberTypeEntity> =>
+    async (request): Promise<MemberTypeEntity | null> =>
       memberTypeController.findOne(fastify, request.params.id)
   );
 
