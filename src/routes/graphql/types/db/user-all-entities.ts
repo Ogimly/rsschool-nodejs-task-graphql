@@ -17,16 +17,19 @@ export const userWithAllEntitiesType = new GraphQLObjectType({
       type: userType,
       resolve: async (user: UserEntity) => user,
     },
+
     profile: {
       type: profileType,
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         profilesController.findOneByUserId(fastify, id, ThrowError.no),
     },
+
     posts: {
       type: new GraphQLList(postType),
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         postsController.findManyByUserId(fastify, id),
     },
+
     memberType: {
       type: memberTypeType,
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) => {

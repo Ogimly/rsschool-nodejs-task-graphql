@@ -70,7 +70,37 @@
      }
      ```
 
-     2.5. Get users with their `userSubscribedTo`, profile.  
+     2.5. Get users with their `userSubscribedTo`, profile.
+
+     ```
+     query ex2_5 {
+       usersWithSubscribedToFullProfile {
+         user { id firstName lastName email subscribedToUserIds }
+         subscribedTo {
+           user { id firstName lastName email }
+           profile { id userId memberTypeId avatar sex birthday country street city }
+         }
+       }
+     }
+     ```
+
+     or
+
+     ```
+     query ex2_5 {
+       usersWithSubscribedToFullProfile {
+         user { id firstName lastName email subscribedToUserIds }
+         subscribedTo {
+           userFullProfile {
+             id firstName lastName email
+             profile { id userId memberTypeId avatar sex birthday country street city }
+             memberType { id discount monthPostsLimit }
+           }
+         }
+       }
+     }
+     ```
+
      2.6. Get user by id with his `subscribedToUser`, posts.  
      2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
 

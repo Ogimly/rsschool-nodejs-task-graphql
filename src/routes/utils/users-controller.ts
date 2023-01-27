@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { CreateUserDTO, ChangeUserDTO } from '../../utils/DB/entities/DBUsers';
 import { RoutesErrors } from './routes-errors';
+import { ThrowError } from './throw-error';
 
 export const findMany = (fastify: FastifyInstance) => fastify.db.users.findMany();
 
@@ -9,6 +10,23 @@ export const findOne = async (fastify: FastifyInstance, id: string) => {
   if (!found) throw fastify.httpErrors.notFound(RoutesErrors.userNotFound);
 
   return found;
+};
+
+export const findUserSubscribedTo = async (
+  fastify: FastifyInstance,
+  id: string,
+  trowError = ThrowError.yes
+) => {
+  const found = await fastify.db.users.findOne({ key: 'id', equals: id });
+  if (!found && trowError === ThrowError.yes)
+    throw fastify.httpErrors.notFound(RoutesErrors.userNotFound);
+
+  return found
+    ? fastify.db.users.findMany({
+        key: 'id',
+        equalsAnyOf: found.subscribedToUserIds,
+      })
+    : [];
 };
 
 export const create = (fastify: FastifyInstance, body: CreateUserDTO) =>
