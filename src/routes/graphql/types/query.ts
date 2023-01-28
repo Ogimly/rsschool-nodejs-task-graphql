@@ -6,12 +6,25 @@ import { profileType } from './db/profile';
 import { postType } from './db/post';
 import { memberTypeType } from './db/member-type';
 import { userWithAllEntitiesType } from './db/user-all-entities';
-import { userWithUserSubscribedToType } from './db/user-subscribed-to';
-import { userWithSubscribedToUserType } from './db/subscribed-to-user';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
+
+const usersWithAllEntities = {
+  type: new GraphQLList(userWithAllEntitiesType),
+  resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
+    usersController.findMany(fastify),
+};
+
+const userWithAllEntities = {
+  type: userWithAllEntitiesType,
+  args: {
+    id: uuidType,
+  },
+  resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+    usersController.findOne(fastify, id),
+};
 
 export const QueryType = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -76,49 +89,14 @@ export const QueryType = new GraphQLObjectType({
         memberTypeController.findOne(fastify, id),
     },
 
-    usersWithAllEntities: {
-      type: new GraphQLList(userWithAllEntitiesType),
-      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
-        usersController.findMany(fastify),
-    },
+    usersWithAllEntities: usersWithAllEntities,
 
-    userWithAllEntities: {
-      type: userWithAllEntitiesType,
-      args: {
-        id: uuidType,
-      },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
-        usersController.findOne(fastify, id),
-    },
+    userWithAllEntities: userWithAllEntities,
 
-    usersWithUserSubscribedTo: {
-      type: new GraphQLList(userWithUserSubscribedToType),
-      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
-        usersController.findMany(fastify),
-    },
+    usersWithUserSubscribedTo: usersWithAllEntities,
 
-    userWithUserSubscribedTo: {
-      type: userWithUserSubscribedToType,
-      args: {
-        id: uuidType,
-      },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
-        usersController.findOne(fastify, id),
-    },
+    userWithSubscribedToUser: userWithAllEntities,
 
-    usersWithSubscribedToUser: {
-      type: userWithSubscribedToUserType,
-      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
-        usersController.findMany(fastify),
-    },
-
-    userWithSubscribedToUser: {
-      type: userWithSubscribedToUserType,
-      args: {
-        id: uuidType,
-      },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
-        usersController.findOne(fastify, id),
-    },
+    usersWithAllSubscriptions: usersWithAllEntities,
   }),
 });

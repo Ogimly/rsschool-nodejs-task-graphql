@@ -3,6 +3,7 @@ import { GraphQLObjectType, GraphQLList } from 'graphql';
 import { UserEntity } from '../../../../utils/DB/entities/DBUsers';
 import { profileType } from './profile';
 import { userType } from './user';
+import * as usersController from '../../../utils/users-controller';
 import * as profilesController from '../../../utils/profiles-controller';
 import * as postsController from '../../../utils/posts-controller';
 import * as memberTypeController from '../../../utils/member-type-controller';
@@ -50,6 +51,18 @@ export const userWithAllEntitiesType = new GraphQLObjectType({
 
         return null;
       },
+    },
+
+    userSubscribedTo: {
+      type: new GraphQLList(userType),
+      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+        usersController.findUserSubscribedTo(fastify, id, ThrowError.no),
+    },
+
+    subscribedToUser: {
+      type: new GraphQLList(userType),
+      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+        usersController.findSubscribedToUser(fastify, id, ThrowError.no),
     },
   }),
 });
