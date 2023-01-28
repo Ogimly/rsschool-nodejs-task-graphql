@@ -46,7 +46,7 @@
      ```
      query ex2_3 {
        usersWithAllEntities {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          profile { id userId avatar sex birthday country street city memberTypeId }
          memberType { id discount monthPostsLimit }
          posts { id userId title content }
@@ -58,7 +58,7 @@
 
      ```
        usersWithAllEntities {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          profileWithMemberType {
            id userId avatar sex birthday country street city
            memberTypeId
@@ -74,7 +74,7 @@
      ```
      query ex2_4 ($userId: ID!) {
        userWithAllEntities (id: $userId) {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          profile { id userId avatar sex birthday country street city memberTypeId }
          memberType { id discount monthPostsLimit }
          posts { id userId title content }
@@ -90,7 +90,7 @@
      ```
      query ex2_4 ($userId: ID!) {
        userWithAllEntities (id: $userId) {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          profileWithMemberType {
            id userId avatar sex birthday country street city
            memberTypeId
@@ -109,7 +109,7 @@
      ```
      query ex2_5 {
        usersWithUserSubscribedTo {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          profile { id userId avatar sex birthday country street city memberTypeId }
          userSubscribedTo {
            id firstName lastName email subscribedToUserIds
@@ -123,14 +123,14 @@
      ```
      query ex2_5 {
        usersWithUserSubscribedTo {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          profileWithMemberType {
            id userId avatar sex birthday country street city
            memberTypeId
            memberType { id discount monthPostsLimit }
          }
          userSubscribedTo {
-           user { id firstName lastName email subscribedToUserIds }
+           id firstName lastName email subscribedToUserIds
          }
        }
      }
@@ -141,9 +141,9 @@
      ```
      query ex2_6 ($userId: ID!) {
        userWithSubscribedToUser (id: $userId) {
-         user { id firstName lastName email }
+         id firstName lastName email
          subscribedToUser {
-           user { id firstName lastName email subscribedToUserIds }
+           id firstName lastName email subscribedToUserIds
          }
          posts { id userId title content }
        }
@@ -158,9 +158,9 @@
      ```
      query ex2_7 {
        usersWithAllSubscriptions {
-         user { id firstName lastName email subscribedToUserIds }
+         id firstName lastName email subscribedToUserIds
          userSubscribedTo {
-           user { id firstName lastName email subscribedToUserIds }
+           id firstName lastName email subscribedToUserIds
            userSubscribedTo {
              id firstName lastName email subscribedToUserIds
            }
@@ -169,7 +169,7 @@
            }
          }
          subscribedToUser {
-           user { id firstName lastName email subscribedToUserIds }
+           id firstName lastName email subscribedToUserIds
            userSubscribedTo {
              id firstName lastName email subscribedToUserIds
            }

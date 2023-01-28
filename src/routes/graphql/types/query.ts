@@ -1,11 +1,11 @@
 import { GraphQLList, GraphQLObjectType } from 'graphql';
 import { FastifyInstance } from 'fastify';
-import { stringType, uuidType } from './reused';
-import { userType } from './db/user';
 import { profileType } from './db/profile';
 import { postType } from './db/post';
 import { memberTypeType } from './db/member-type';
 import { userWithAllEntitiesType } from './db/user-all-entities';
+import { profileWithMemberTypeType } from './db/profile-member-type';
+import { stringType, uuidType } from './reused';
 import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
@@ -30,7 +30,7 @@ export const QueryType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: () => ({
     users: {
-      type: new GraphQLList(userType),
+      type: new GraphQLList(userWithAllEntitiesType),
       resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
         usersController.findMany(fastify),
     },
@@ -38,6 +38,12 @@ export const QueryType = new GraphQLObjectType({
     profiles: {
       type: new GraphQLList(profileType),
       resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        profilesController.findMany(fastify),
+    },
+
+    profilesWithMemberType: {
+      type: new GraphQLList(profileWithMemberTypeType),
+      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
         profilesController.findMany(fastify),
     },
 
@@ -54,7 +60,7 @@ export const QueryType = new GraphQLObjectType({
     },
 
     user: {
-      type: userType,
+      type: userWithAllEntitiesType,
       args: {
         id: uuidType,
       },
@@ -64,6 +70,15 @@ export const QueryType = new GraphQLObjectType({
 
     profile: {
       type: profileType,
+      args: {
+        id: uuidType,
+      },
+      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+        profilesController.findOne(fastify, id),
+    },
+
+    profileWithMemberType: {
+      type: profileWithMemberTypeType,
       args: {
         id: uuidType,
       },

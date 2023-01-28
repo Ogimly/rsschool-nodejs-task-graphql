@@ -16,7 +16,6 @@ export const userType = new GraphQLObjectType({
     email: stringType,
     subscribedToUserIds: {
       type: new GraphQLList(GraphQLString),
-      description: 'Array of users ids, that have followed the User',
     },
   }),
 });

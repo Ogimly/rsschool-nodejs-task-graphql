@@ -1,42 +1,37 @@
 import { FastifyInstance } from 'fastify';
-import { GraphQLObjectType, GraphQLList } from 'graphql';
+import {
+  GraphQLObjectType,
+  GraphQLList,
+  GraphQLOutputType,
+  GraphQLString,
+} from 'graphql';
 import { UserEntity } from '../../../../utils/DB/entities/DBUsers';
 import { profileType } from './profile';
-import { userType } from './user';
+import { memberTypeType } from './member-type';
+import { profileWithMemberTypeType } from './profile-member-type';
+import { postType } from './post';
+import { uuidType, stringType } from '../reused';
 import * as usersController from '../../../utils/users-controller';
 import * as profilesController from '../../../utils/profiles-controller';
 import * as postsController from '../../../utils/posts-controller';
 import * as memberTypeController from '../../../utils/member-type-controller';
-import { postType } from './post';
-import { memberTypeType } from './member-type';
 import { ThrowError } from '../../../utils/throw-error';
-import { profileWithMemberTypeType } from './profile-member-type';
-import { userWithAllSubscriptionsType } from './user-all-subscriptions';
 
-export const userWithAllEntitiesType = new GraphQLObjectType({
+export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType({
   name: 'userWithAllEntitiesType',
   fields: () => ({
-    user: {
-      type: userType,
-      resolve: async (user: UserEntity) => user,
+    id: uuidType,
+    firstName: stringType,
+    lastName: stringType,
+    email: stringType,
+    subscribedToUserIds: {
+      type: new GraphQLList(GraphQLString),
     },
 
     profile: {
       type: profileType,
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         profilesController.findOneByUserId(fastify, id, ThrowError.no),
-    },
-
-    profileWithMemberType: {
-      type: profileWithMemberTypeType,
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
-        profilesController.findOneByUserId(fastify, id, ThrowError.no),
-    },
-
-    posts: {
-      type: new GraphQLList(postType),
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
-        postsController.findManyByUserId(fastify, id),
     },
 
     memberType: {
@@ -54,14 +49,26 @@ export const userWithAllEntitiesType = new GraphQLObjectType({
       },
     },
 
+    profileWithMemberType: {
+      type: profileWithMemberTypeType,
+      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+        profilesController.findOneByUserId(fastify, id, ThrowError.no),
+    },
+
+    posts: {
+      type: new GraphQLList(postType),
+      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+        postsController.findManyByUserId(fastify, id),
+    },
+
     userSubscribedTo: {
-      type: new GraphQLList(userWithAllSubscriptionsType),
+      type: new GraphQLList(userWithAllEntitiesType),
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         usersController.findUserSubscribedTo(fastify, id, ThrowError.no),
     },
 
     subscribedToUser: {
-      type: new GraphQLList(userWithAllSubscriptionsType),
+      type: new GraphQLList(userWithAllEntitiesType),
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         usersController.findSubscribedToUser(fastify, id, ThrowError.no),
     },
