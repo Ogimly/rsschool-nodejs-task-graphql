@@ -6,7 +6,6 @@ import { profileType } from './db/profile';
 import { postType } from './db/post';
 import { memberTypeType } from './db/member-type';
 import { userWithAllEntitiesType } from './db/user-all-entities';
-import { userWithFullProfileType } from './db/user-full-profile';
 import { userWithUserSubscribedToType } from './db/user-subscribed-to';
 import { userWithSubscribedToUserType } from './db/subscribed-to-user';
 import * as usersController from '../../utils/users-controller';
@@ -92,21 +91,6 @@ export const QueryType = new GraphQLObjectType({
         usersController.findOne(fastify, id),
     },
 
-    usersFullProfile: {
-      type: new GraphQLList(userWithFullProfileType),
-      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
-        usersController.findMany(fastify),
-    },
-
-    userFullProfile: {
-      type: userWithFullProfileType,
-      args: {
-        id: uuidType,
-      },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
-        usersController.findOne(fastify, id),
-    },
-
     usersWithUserSubscribedTo: {
       type: new GraphQLList(userWithUserSubscribedToType),
       resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
@@ -120,6 +104,12 @@ export const QueryType = new GraphQLObjectType({
       },
       resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
         usersController.findOne(fastify, id),
+    },
+
+    usersWithSubscribedToUser: {
+      type: userWithSubscribedToUserType,
+      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
+        usersController.findMany(fastify),
     },
 
     userWithSubscribedToUser: {

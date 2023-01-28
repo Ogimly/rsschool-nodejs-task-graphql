@@ -9,6 +9,7 @@ import * as memberTypeController from '../../../utils/member-type-controller';
 import { postType } from './post';
 import { memberTypeType } from './member-type';
 import { ThrowError } from '../../../utils/throw-error';
+import { profileWithMemberTypeType } from './profile-member-type';
 
 export const userWithAllEntitiesType = new GraphQLObjectType({
   name: 'userWithAllEntitiesType',
@@ -20,6 +21,12 @@ export const userWithAllEntitiesType = new GraphQLObjectType({
 
     profile: {
       type: profileType,
+      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+        profilesController.findOneByUserId(fastify, id, ThrowError.no),
+    },
+
+    profileWithMemberType: {
+      type: profileWithMemberTypeType,
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         profilesController.findOneByUserId(fastify, id, ThrowError.no),
     },

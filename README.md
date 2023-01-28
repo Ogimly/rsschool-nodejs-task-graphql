@@ -47,9 +47,24 @@
      query ex2_3 {
        usersWithAllEntities {
          user { id firstName lastName email subscribedToUserIds }
-         profile { id userId memberTypeId avatar sex birthday country street city }
-         posts { id userId title content }
+         profile { id userId avatar sex birthday country street city memberTypeId }
          memberType { id discount monthPostsLimit }
+         posts { id userId title content }
+       }
+     }
+     ```
+
+     or
+
+     ```
+       usersWithAllEntities {
+         user { id firstName lastName email subscribedToUserIds }
+         profileWithMemberType {
+           id userId avatar sex birthday country street city
+           memberTypeId
+           memberType { id discount monthPostsLimit }
+         }
+         posts { id userId title content }
        }
      }
      ```
@@ -60,9 +75,28 @@
      query ex2_4 ($userId: ID!) {
        userWithAllEntities (id: $userId) {
          user { id firstName lastName email subscribedToUserIds }
-         profile { id userId memberTypeId avatar sex birthday country street city }
-         posts { id userId title content }
+         profile { id userId avatar sex birthday country street city memberTypeId }
          memberType { id discount monthPostsLimit }
+         posts { id userId title content }
+       }
+     }
+     {
+       "userId": "uuid"
+     }
+     ```
+
+     or
+
+     ```
+     query ex2_4 ($userId: ID!) {
+       userWithAllEntities (id: $userId) {
+         user { id firstName lastName email subscribedToUserIds }
+         profileWithMemberType {
+           id userId avatar sex birthday country street city
+           memberTypeId
+           memberType { id discount monthPostsLimit }
+         }
+         posts { id userId title content }
        }
      }
      {
@@ -76,9 +110,9 @@
      query ex2_5 {
        usersWithUserSubscribedTo {
          user { id firstName lastName email subscribedToUserIds }
+         profile { id userId avatar sex birthday country street city memberTypeId }
          userSubscribedTo {
-           user { id firstName lastName email }
-           profile { id userId memberTypeId avatar sex birthday country street city }
+           id firstName lastName email subscribedToUserIds
          }
        }
      }
@@ -90,12 +124,13 @@
      query ex2_5 {
        usersWithUserSubscribedTo {
          user { id firstName lastName email subscribedToUserIds }
+         profileWithMemberType {
+           id userId avatar sex birthday country street city
+           memberTypeId
+           memberType { id discount monthPostsLimit }
+         }
          userSubscribedTo {
-           userFullProfile {
-             id firstName lastName email
-             profile { id userId memberTypeId avatar sex birthday country street city }
-             memberType { id discount monthPostsLimit }
-           }
+           id firstName lastName email subscribedToUserIds
          }
        }
      }
