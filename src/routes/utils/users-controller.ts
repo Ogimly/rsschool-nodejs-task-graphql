@@ -29,6 +29,23 @@ export const findUserSubscribedTo = async (
     : [];
 };
 
+export const findSubscribedToUser = async (
+  fastify: FastifyInstance,
+  id: string,
+  trowError = ThrowError.yes
+) => {
+  const found = await fastify.db.users.findOne({ key: 'id', equals: id });
+  if (!found && trowError === ThrowError.yes)
+    throw fastify.httpErrors.notFound(RoutesErrors.userNotFound);
+
+  return found
+    ? fastify.db.users.findMany({
+        key: 'subscribedToUserIds',
+        inArray: id,
+      })
+    : [];
+};
+
 export const create = (fastify: FastifyInstance, body: CreateUserDTO) =>
   fastify.db.users.create(body);
 

@@ -101,7 +101,23 @@
      }
      ```
 
-     2.6. Get user by id with his `subscribedToUser`, posts.  
+     2.6. Get user by id with his `subscribedToUser`, posts.
+
+     ```
+     query ex2_6 ($userId: ID!) {
+       userWithSubscribedToUser (id: $userId) {
+         user { id firstName lastName email }
+         subscribedToUser {
+           user { id firstName lastName email subscribedToUserIds }
+           posts { id userId title content }
+         }
+       }
+     }
+     {
+       "userId": "uuid"
+     }
+     ```
+
      2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
 
    - Create gql requests:  
