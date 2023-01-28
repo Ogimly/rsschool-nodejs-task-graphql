@@ -1,4 +1,4 @@
-import { idType, uuidType } from './reused';
+import { stringType, uuidType } from './reused';
 import { memberTypeType, memberTypeUpdateType } from './db/member-type';
 import { postCreateType, postType, postUpdateType } from './db/post';
 import { profileCreateType, profileType, profileUpdateType } from './db/profile';
@@ -73,7 +73,7 @@ export const MutationType = new GraphQLObjectType({
     updateMemberType: {
       type: memberTypeType,
       args: {
-        id: idType,
+        id: stringType,
         updateMemberTypeDTO: memberTypeUpdateType,
       },
       resolve: (_: unknown, { id, updateMemberTypeDTO }: any, fastify: FastifyInstance) =>

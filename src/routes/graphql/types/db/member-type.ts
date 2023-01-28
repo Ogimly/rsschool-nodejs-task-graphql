@@ -1,24 +1,13 @@
-import {
-  GraphQLID,
-  GraphQLInputObjectType,
-  GraphQLInt,
-  GraphQLNonNull,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLInputObjectType, GraphQLInt, GraphQLObjectType } from 'graphql';
+import { numberType, uuidType } from '../reused';
 
 export const memberTypeType = new GraphQLObjectType({
   name: 'memberTypeType',
   description: 'Member type',
   fields: () => ({
-    id: { type: new GraphQLNonNull(GraphQLID), description: 'Unique id' },
-    discount: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'Discount of the Member type',
-    },
-    monthPostsLimit: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'limit on the number of posts per month of the Member type',
-    },
+    id: uuidType,
+    discount: numberType,
+    monthPostsLimit: numberType,
   }),
 });
 

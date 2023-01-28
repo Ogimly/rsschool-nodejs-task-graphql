@@ -1,22 +1,17 @@
 import { FastifyInstance } from 'fastify';
-import {
-  GraphQLID,
-  GraphQLInt,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { ProfileEntity } from '../../../../utils/DB/entities/DBProfiles';
 import * as memberTypeController from '../../../utils/member-type-controller';
 import { ThrowError } from '../../../utils/throw-error';
+import { numberType, stringType, uuidType } from '../reused';
 import { memberTypeType } from './member-type';
 
 export const profileWithMemberTypeType = new GraphQLObjectType({
   name: 'profileWithMemberTypeType',
   fields: () => ({
-    id: { type: new GraphQLNonNull(GraphQLID) },
-    userId: { type: new GraphQLNonNull(GraphQLID) },
-    memberTypeId: { type: new GraphQLNonNull(GraphQLString) },
+    id: uuidType,
+    userId: uuidType,
+    memberTypeId: stringType,
     memberType: {
       type: new GraphQLNonNull(memberTypeType),
       resolve: async (
@@ -25,11 +20,11 @@ export const profileWithMemberTypeType = new GraphQLObjectType({
         fastify: FastifyInstance
       ) => memberTypeController.findOne(fastify, memberTypeId, ThrowError.no),
     },
-    avatar: { type: new GraphQLNonNull(GraphQLString) },
-    sex: { type: new GraphQLNonNull(GraphQLString) },
-    birthday: { type: new GraphQLNonNull(GraphQLInt) },
-    country: { type: new GraphQLNonNull(GraphQLString) },
-    street: { type: new GraphQLNonNull(GraphQLString) },
-    city: { type: new GraphQLNonNull(GraphQLString) },
+    avatar: stringType,
+    sex: stringType,
+    birthday: numberType,
+    country: stringType,
+    street: stringType,
+    city: stringType,
   }),
 });

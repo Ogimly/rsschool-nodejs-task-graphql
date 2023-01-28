@@ -1,6 +1,6 @@
 import { GraphQLList, GraphQLObjectType } from 'graphql';
 import { FastifyInstance } from 'fastify';
-import { idType, uuidType } from './reused';
+import { stringType, uuidType } from './reused';
 import { userType } from './db/user';
 import { profileType } from './db/profile';
 import { postType } from './db/post';
@@ -83,7 +83,7 @@ export const QueryType = new GraphQLObjectType({
     memberType: {
       type: memberTypeType,
       args: {
-        id: idType,
+        id: stringType,
       },
       resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
         memberTypeController.findOne(fastify, id),

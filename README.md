@@ -130,7 +130,7 @@
            memberType { id discount monthPostsLimit }
          }
          userSubscribedTo {
-           id firstName lastName email subscribedToUserIds
+           user { id firstName lastName email subscribedToUserIds }
          }
        }
      }
@@ -143,7 +143,7 @@
        userWithSubscribedToUser (id: $userId) {
          user { id firstName lastName email }
          subscribedToUser {
-           id firstName lastName email subscribedToUserIds
+           user { id firstName lastName email subscribedToUserIds }
          }
          posts { id userId title content }
        }
