@@ -155,6 +155,32 @@
 
      2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).
 
+     ```
+     query ex2_7 {
+       usersWithAllSubscriptions {
+         user { id firstName lastName email subscribedToUserIds }
+         userSubscribedTo {
+           user { id firstName lastName email subscribedToUserIds }
+           userSubscribedTo {
+             id firstName lastName email subscribedToUserIds
+           }
+           subscribedToUser {
+             id firstName lastName email subscribedToUserIds
+           }
+         }
+         subscribedToUser {
+           user { id firstName lastName email subscribedToUserIds }
+           userSubscribedTo {
+             id firstName lastName email subscribedToUserIds
+           }
+           subscribedToUser {
+             id firstName lastName email subscribedToUserIds
+           }
+         }
+       }
+     }
+     ```
+
    - Create gql requests:  
      2.8. Create user.
      ```

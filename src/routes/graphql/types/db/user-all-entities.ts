@@ -11,6 +11,7 @@ import { postType } from './post';
 import { memberTypeType } from './member-type';
 import { ThrowError } from '../../../utils/throw-error';
 import { profileWithMemberTypeType } from './profile-member-type';
+import { userWithAllSubscriptionsType } from './user-all-subscriptions';
 
 export const userWithAllEntitiesType = new GraphQLObjectType({
   name: 'userWithAllEntitiesType',
@@ -54,13 +55,13 @@ export const userWithAllEntitiesType = new GraphQLObjectType({
     },
 
     userSubscribedTo: {
-      type: new GraphQLList(userType),
+      type: new GraphQLList(userWithAllSubscriptionsType),
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         usersController.findUserSubscribedTo(fastify, id, ThrowError.no),
     },
 
     subscribedToUser: {
-      type: new GraphQLList(userType),
+      type: new GraphQLList(userWithAllSubscriptionsType),
       resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
         usersController.findSubscribedToUser(fastify, id, ThrowError.no),
     },
