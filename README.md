@@ -143,9 +143,9 @@
        userWithSubscribedToUser (id: $userId) {
          user { id firstName lastName email }
          subscribedToUser {
-           user { id firstName lastName email subscribedToUserIds }
-           posts { id userId title content }
+           id firstName lastName email subscribedToUserIds
          }
+         posts { id userId title content }
        }
      }
      {
