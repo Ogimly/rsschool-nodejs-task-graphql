@@ -6,6 +6,7 @@ import { graphqlBodySchema } from './schema';
 import { MutationType } from './types/mutation';
 import { QueryType } from './types/query';
 import { ContextType } from './index.d';
+import { createDataLoaders } from '../loaders/data-loaders';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   const graphqlQuerySchema = new GraphQLSchema({
@@ -32,7 +33,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
           return { errors, data: null };
         }
 
-        const context: ContextType = { fastify };
+        const dataLoaders = createDataLoaders(fastify);
+        const context: ContextType = { fastify, ...dataLoaders };
 
         return await graphql({
           schema: graphqlQuerySchema,
