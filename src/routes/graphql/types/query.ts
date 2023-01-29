@@ -1,5 +1,4 @@
 import { GraphQLList, GraphQLObjectType } from 'graphql';
-import { FastifyInstance } from 'fastify';
 import { profileType } from './db/profile';
 import { postType } from './db/post';
 import { memberTypeType } from './db/member-type';
@@ -10,10 +9,11 @@ import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
+import { ContextType } from '../index.d';
 
 const usersWithAllEntities = {
   type: new GraphQLList(userWithAllEntitiesType),
-  resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
+  resolve: async (_: unknown, __: unknown, { fastify }: ContextType) =>
     usersController.findMany(fastify),
 };
 
@@ -22,7 +22,7 @@ const userWithAllEntities = {
   args: {
     id: uuidType,
   },
-  resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+  resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
     usersController.findOne(fastify, id),
 };
 
@@ -31,31 +31,31 @@ export const QueryType = new GraphQLObjectType({
   fields: () => ({
     users: {
       type: new GraphQLList(userWithAllEntitiesType),
-      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
         usersController.findMany(fastify),
     },
 
     profiles: {
       type: new GraphQLList(profileType),
-      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
         profilesController.findMany(fastify),
     },
 
     profilesWithMemberType: {
       type: new GraphQLList(profileWithMemberTypeType),
-      resolve: async (_: unknown, __: unknown, fastify: FastifyInstance) =>
+      resolve: async (_: unknown, __: unknown, { fastify }: ContextType) =>
         profilesController.findMany(fastify),
     },
 
     posts: {
       type: new GraphQLList(postType),
-      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
         postsController.findMany(fastify),
     },
 
     memberTypes: {
       type: new GraphQLList(memberTypeType),
-      resolve: (_: unknown, __: unknown, fastify: FastifyInstance) =>
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
         memberTypeController.findMany(fastify),
     },
 
@@ -64,7 +64,7 @@ export const QueryType = new GraphQLObjectType({
       args: {
         id: uuidType,
       },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
         usersController.findOne(fastify, id),
     },
 
@@ -73,7 +73,7 @@ export const QueryType = new GraphQLObjectType({
       args: {
         id: uuidType,
       },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
         profilesController.findOne(fastify, id),
     },
 
@@ -82,7 +82,7 @@ export const QueryType = new GraphQLObjectType({
       args: {
         id: uuidType,
       },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
         profilesController.findOne(fastify, id),
     },
 
@@ -91,7 +91,7 @@ export const QueryType = new GraphQLObjectType({
       args: {
         id: uuidType,
       },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
         postsController.findOne(fastify, id),
     },
 
@@ -100,7 +100,7 @@ export const QueryType = new GraphQLObjectType({
       args: {
         id: stringType,
       },
-      resolve: async (_: unknown, { id }: any, fastify: FastifyInstance) =>
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
         memberTypeController.findOne(fastify, id),
     },
 

@@ -8,7 +8,7 @@ import * as usersController from '../utils/users-controller';
 import * as profilesController from '../utils/profiles-controller';
 import * as memberTypeController from '../utils/member-type-controller';
 import * as postsController from '../utils/posts-controller';
-import { DataLoadersType } from './loader';
+import { DataLoadersType } from './data-loaders.d';
 
 const batchGetUsers = async (ids: readonly string[], fastify: FastifyInstance) => {
   const users = await usersController.findMany(fastify);

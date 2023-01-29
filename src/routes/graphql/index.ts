@@ -5,6 +5,7 @@ import { DEPTH_LIMIT } from '../utils/const';
 import { graphqlBodySchema } from './schema';
 import { MutationType } from './types/mutation';
 import { QueryType } from './types/query';
+import { ContextType } from './index.d';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   const graphqlQuerySchema = new GraphQLSchema({
@@ -31,11 +32,13 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
           return { errors, data: null };
         }
 
+        const context: ContextType = { fastify };
+
         return await graphql({
           schema: graphqlQuerySchema,
           source: query,
           variableValues: variables,
-          contextValue: fastify,
+          contextValue: context,
         });
       }
 

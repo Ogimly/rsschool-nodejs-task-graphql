@@ -7,8 +7,8 @@ import * as usersController from '../../utils/users-controller';
 import * as profilesController from '../../utils/profiles-controller';
 import * as postsController from '../../utils/posts-controller';
 import * as memberTypeController from '../../utils/member-type-controller';
-import { FastifyInstance } from 'fastify';
 import { GraphQLObjectType } from 'graphql';
+import { ContextType } from '../index.d';
 
 export const MutationType = new GraphQLObjectType({
   name: 'RootMutationType',
@@ -18,7 +18,7 @@ export const MutationType = new GraphQLObjectType({
       args: {
         createUserDTO: userCreateType,
       },
-      resolve: (_: unknown, { createUserDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { createUserDTO }: any, { fastify }: ContextType) =>
         usersController.create(fastify, createUserDTO),
     },
 
@@ -27,7 +27,7 @@ export const MutationType = new GraphQLObjectType({
       args: {
         createProfileDTO: profileCreateType,
       },
-      resolve: (_: unknown, { createProfileDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { createProfileDTO }: any, { fastify }: ContextType) =>
         profilesController.create(fastify, createProfileDTO),
     },
 
@@ -36,7 +36,7 @@ export const MutationType = new GraphQLObjectType({
       args: {
         createPostDTO: postCreateType,
       },
-      resolve: (_: unknown, { createPostDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { createPostDTO }: any, { fastify }: ContextType) =>
         postsController.create(fastify, createPostDTO),
     },
 
@@ -46,7 +46,7 @@ export const MutationType = new GraphQLObjectType({
         id: uuidType,
         updateUserDTO: userUpdateType,
       },
-      resolve: (_: unknown, { id, updateUserDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { id, updateUserDTO }: any, { fastify }: ContextType) =>
         usersController.update(fastify, id, updateUserDTO),
     },
 
@@ -56,7 +56,7 @@ export const MutationType = new GraphQLObjectType({
         id: uuidType,
         updateProfileDTO: profileUpdateType,
       },
-      resolve: (_: unknown, { id, updateProfileDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { id, updateProfileDTO }: any, { fastify }: ContextType) =>
         profilesController.update(fastify, id, updateProfileDTO),
     },
 
@@ -66,7 +66,7 @@ export const MutationType = new GraphQLObjectType({
         id: uuidType,
         updatePostDTO: postUpdateType,
       },
-      resolve: (_: unknown, { id, updatePostDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { id, updatePostDTO }: any, { fastify }: ContextType) =>
         postsController.update(fastify, id, updatePostDTO),
     },
 
@@ -76,7 +76,7 @@ export const MutationType = new GraphQLObjectType({
         id: stringType,
         updateMemberTypeDTO: memberTypeUpdateType,
       },
-      resolve: (_: unknown, { id, updateMemberTypeDTO }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { id, updateMemberTypeDTO }: any, { fastify }: ContextType) =>
         memberTypeController.update(fastify, id, updateMemberTypeDTO),
     },
 
@@ -86,7 +86,7 @@ export const MutationType = new GraphQLObjectType({
         id: uuidType,
         idForSubscribe: uuidType,
       },
-      resolve: (_: unknown, { id, idForSubscribe }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { id, idForSubscribe }: any, { fastify }: ContextType) =>
         usersController.subscribe(fastify, id, idForSubscribe),
     },
 
@@ -96,7 +96,7 @@ export const MutationType = new GraphQLObjectType({
         id: uuidType,
         idForUnsubscribe: uuidType,
       },
-      resolve: (_: unknown, { id, idForUnsubscribe }: any, fastify: FastifyInstance) =>
+      resolve: (_: unknown, { id, idForUnsubscribe }: any, { fastify }: ContextType) =>
         usersController.unsubscribe(fastify, id, idForUnsubscribe),
     },
   }),

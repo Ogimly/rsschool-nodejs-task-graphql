@@ -1,4 +1,3 @@
-import { FastifyInstance } from 'fastify';
 import {
   GraphQLObjectType,
   GraphQLList,
@@ -16,6 +15,7 @@ import * as profilesController from '../../../utils/profiles-controller';
 import * as postsController from '../../../utils/posts-controller';
 import * as memberTypeController from '../../../utils/member-type-controller';
 import { ThrowError } from '../../../utils/throw-error';
+import { ContextType } from '../../index.d';
 
 export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType({
   name: 'userWithAllEntitiesType',
@@ -30,13 +30,13 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     profile: {
       type: profileType,
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
         profilesController.findOneByUserId(fastify, id, ThrowError.no),
     },
 
     memberType: {
       type: memberTypeType,
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) => {
+      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) => {
         const found = await profilesController.findOneByUserId(
           fastify,
           id,
@@ -51,25 +51,25 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     profileWithMemberType: {
       type: profileWithMemberTypeType,
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
         profilesController.findOneByUserId(fastify, id, ThrowError.no),
     },
 
     posts: {
       type: new GraphQLList(postType),
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
         postsController.findManyByUserId(fastify, id),
     },
 
     userSubscribedTo: {
       type: new GraphQLList(userWithAllEntitiesType),
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
         usersController.findUserSubscribedTo(fastify, id, ThrowError.no),
     },
 
     subscribedToUser: {
       type: new GraphQLList(userWithAllEntitiesType),
-      resolve: async ({ id }: UserEntity, _: unknown, fastify: FastifyInstance) =>
+      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
         usersController.findSubscribedToUser(fastify, id, ThrowError.no),
     },
   }),

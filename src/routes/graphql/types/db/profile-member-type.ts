@@ -1,10 +1,10 @@
-import { FastifyInstance } from 'fastify';
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { ProfileEntity } from '../../../../utils/DB/entities/DBProfiles';
 import * as memberTypeController from '../../../utils/member-type-controller';
 import { ThrowError } from '../../../utils/throw-error';
 import { numberType, stringType, uuidType } from '../reused';
 import { memberTypeType } from './member-type';
+import { ContextType } from '../../index.d';
 
 export const profileWithMemberTypeType = new GraphQLObjectType({
   name: 'profileWithMemberTypeType',
@@ -17,7 +17,7 @@ export const profileWithMemberTypeType = new GraphQLObjectType({
       resolve: async (
         { memberTypeId }: ProfileEntity,
         _: unknown,
-        fastify: FastifyInstance
+        { fastify }: ContextType
       ) => memberTypeController.findOne(fastify, memberTypeId, ThrowError.no),
     },
     avatar: stringType,
