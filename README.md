@@ -266,7 +266,7 @@
      2.14. Update post.
 
      ```
-     mutation ex2_14 ($id:ID!, $updatePostDTO: postUpdateType ) {
+     mutation ex2_14 ($id:ID!, $updatePostDTO: postUpdateType! ) {
        updatePost ( id: $id, updatePostDTO: $updatePostDTO )
          { id userId title content }
      }
