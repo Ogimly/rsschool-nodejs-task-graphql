@@ -23,8 +23,8 @@ export const findUserSubscribedTo = async (
 
   return found
     ? fastify.db.users.findMany({
-        key: 'id',
-        equalsAnyOf: found.subscribedToUserIds,
+        key: 'subscribedToUserIds',
+        inArray: id,
       })
     : [];
 };
@@ -40,8 +40,8 @@ export const findSubscribedToUser = async (
 
   return found
     ? fastify.db.users.findMany({
-        key: 'subscribedToUserIds',
-        inArray: id,
+        key: 'id',
+        equalsAnyOf: found.subscribedToUserIds,
       })
     : [];
 };

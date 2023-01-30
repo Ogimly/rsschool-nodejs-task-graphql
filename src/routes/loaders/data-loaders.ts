@@ -67,8 +67,8 @@ const batchGetUserSubscribedTo = async (
   const userSubscribedToMap: Record<string, UserEntity[]> = {};
 
   users.forEach((userSubscribedTo: UserEntity) => {
-    userSubscribedToMap[userSubscribedTo.id] = users.filter(({ id }) =>
-      userSubscribedTo.subscribedToUserIds.includes(id)
+    userSubscribedToMap[userSubscribedTo.id] = users.filter(({ subscribedToUserIds }) =>
+      subscribedToUserIds.includes(userSubscribedTo.id)
     );
   });
 
@@ -84,8 +84,8 @@ const batchGetSubscribedToUser = async (
   const subscribedToUserMap: Record<string, UserEntity[]> = {};
 
   users.forEach((subscribedToUser: UserEntity) => {
-    subscribedToUserMap[subscribedToUser.id] = users.filter(({ subscribedToUserIds }) =>
-      subscribedToUserIds.includes(subscribedToUser.id)
+    subscribedToUserMap[subscribedToUser.id] = users.filter(({ id }) =>
+      subscribedToUser.subscribedToUserIds.includes(id)
     );
   });
 

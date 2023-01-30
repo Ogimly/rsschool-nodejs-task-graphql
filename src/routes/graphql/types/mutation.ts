@@ -87,7 +87,7 @@ export const MutationType = new GraphQLObjectType({
         idForSubscribe: uuidType,
       },
       resolve: (_: unknown, { id, idForSubscribe }: any, { fastify }: ContextType) =>
-        usersController.subscribe(fastify, id, idForSubscribe),
+        usersController.subscribe(fastify, idForSubscribe, id),
     },
 
     unsubscribeFrom: {
@@ -97,7 +97,7 @@ export const MutationType = new GraphQLObjectType({
         idForUnsubscribe: uuidType,
       },
       resolve: (_: unknown, { id, idForUnsubscribe }: any, { fastify }: ContextType) =>
-        usersController.unsubscribe(fastify, id, idForUnsubscribe),
+        usersController.unsubscribe(fastify, idForUnsubscribe, id),
     },
   }),
 });
