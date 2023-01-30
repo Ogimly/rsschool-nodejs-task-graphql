@@ -12,7 +12,7 @@ import { postType } from './post';
 import { uuidType, stringType } from '../reused';
 import * as usersController from '../../../utils/users-controller';
 import * as profilesController from '../../../utils/profiles-controller';
-import * as postsController from '../../../utils/posts-controller';
+// import * as postsController from '../../../utils/posts-controller';
 import * as memberTypeController from '../../../utils/member-type-controller';
 import { ThrowError } from '../../../utils/throw-error';
 import { ContextType } from '../../index.d';
@@ -61,8 +61,10 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     posts: {
       type: new GraphQLList(postType),
-      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
-        postsController.findManyByUserId(fastify, id),
+      // resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
+      //   postsController.findManyByUserId(fastify, id),
+      resolve: async ({ id }: UserEntity, _: unknown, { postsLoader }: ContextType) =>
+        postsLoader.load(id),
     },
 
     userSubscribedTo: {
