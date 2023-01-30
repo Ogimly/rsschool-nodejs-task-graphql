@@ -10,7 +10,7 @@ import { memberTypeType } from './member-type';
 import { profileWithMemberTypeType } from './profile-member-type';
 import { postType } from './post';
 import { uuidType, stringType } from '../reused';
-import * as usersController from '../../../utils/users-controller';
+// import * as usersController from '../../../utils/users-controller';
 import * as profilesController from '../../../utils/profiles-controller';
 // import * as postsController from '../../../utils/posts-controller';
 import * as memberTypeController from '../../../utils/member-type-controller';
@@ -69,14 +69,24 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     userSubscribedTo: {
       type: new GraphQLList(userWithAllEntitiesType),
-      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
-        usersController.findUserSubscribedTo(fastify, id, ThrowError.no),
+      // resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
+      //   usersController.findUserSubscribedTo(fastify, id, ThrowError.no),
+      resolve: async (
+        { id }: UserEntity,
+        _: unknown,
+        { userSubscribedToLoader }: ContextType
+      ) => userSubscribedToLoader.load(id),
     },
 
     subscribedToUser: {
       type: new GraphQLList(userWithAllEntitiesType),
-      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
-        usersController.findSubscribedToUser(fastify, id, ThrowError.no),
+      // resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
+      //   usersController.findSubscribedToUser(fastify, id, ThrowError.no),
+      resolve: async (
+        { id }: UserEntity,
+        _: unknown,
+        { subscribedToUserLoader }: ContextType
+      ) => subscribedToUserLoader.load(id),
     },
   }),
 });
