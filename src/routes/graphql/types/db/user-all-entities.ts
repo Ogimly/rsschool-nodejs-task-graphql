@@ -30,8 +30,10 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     profile: {
       type: profileType,
-      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
-        profilesController.findOneByUserId(fastify, id, ThrowError.no),
+      // resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
+      //   profilesController.findOneByUserId(fastify, id, ThrowError.no),
+      resolve: async ({ id }: UserEntity, _: unknown, { profilesLoader }: ContextType) =>
+        profilesLoader.load(id),
     },
 
     memberType: {
@@ -51,8 +53,10 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     profileWithMemberType: {
       type: profileWithMemberTypeType,
-      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
-        profilesController.findOneByUserId(fastify, id, ThrowError.no),
+      // resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) =>
+      //   profilesController.findOneByUserId(fastify, id, ThrowError.no),
+      resolve: async ({ id }: UserEntity, _: unknown, { profilesLoader }: ContextType) =>
+        profilesLoader.load(id),
     },
 
     posts: {

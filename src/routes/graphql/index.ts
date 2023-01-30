@@ -33,7 +33,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
           return { errors, data: null };
         }
 
-        const dataLoaders = createDataLoaders(fastify);
+        const dataLoaders = await createDataLoaders(fastify);
         const context: ContextType = { fastify, ...dataLoaders };
 
         return await graphql({

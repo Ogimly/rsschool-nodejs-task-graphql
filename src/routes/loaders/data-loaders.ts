@@ -10,8 +10,13 @@ import * as memberTypeController from '../utils/member-type-controller';
 import * as postsController from '../utils/posts-controller';
 import { DataLoadersType } from './data-loaders.d';
 
-const batchGetUsers = async (ids: readonly string[], fastify: FastifyInstance) => {
-  const users = await usersController.findMany(fastify);
+// [userId]: user
+const batchGetUsers = async (
+  ids: readonly string[],
+  fastify: FastifyInstance,
+  users: UserEntity[]
+) => {
+  // const users = await usersController.findMany(fastify);
 
   const usersMap: Record<string, UserEntity> = {};
 
@@ -22,18 +27,25 @@ const batchGetUsers = async (ids: readonly string[], fastify: FastifyInstance) =
   return ids.map((id) => usersMap[id]);
 };
 
-const batchGetProfiles = async (ids: readonly string[], fastify: FastifyInstance) => {
+// [userId]: profile
+const batchGetProfiles = async (
+  ids: readonly string[],
+  fastify: FastifyInstance,
+  users: UserEntity[]
+) => {
+  // const users = await usersController.findMany(fastify);
   const profiles = await profilesController.findMany(fastify);
 
-  const profilesMap: Record<string, ProfileEntity> = {};
+  const profilesMap: Record<string, ProfileEntity | null> = {};
 
-  profiles.forEach((profile: ProfileEntity) => {
-    profilesMap[profile.id] = profile;
+  users.forEach(({ id }: UserEntity) => {
+    profilesMap[id] = profiles.find(({ userId }: ProfileEntity) => userId === id) || null;
   });
 
   return ids.map((id) => profilesMap[id]);
 };
 
+// [memberTypeId]: memberType
 const batchGetMemberTypes = async (ids: readonly string[], fastify: FastifyInstance) => {
   const memberTypes = await memberTypeController.findMany(fastify);
 
@@ -46,13 +58,19 @@ const batchGetMemberTypes = async (ids: readonly string[], fastify: FastifyInsta
   return ids.map((id) => memberTypesMap[id]);
 };
 
-const batchGetPosts = async (ids: readonly string[], fastify: FastifyInstance) => {
+// [userId]: posts
+const batchGetPosts = async (
+  ids: readonly string[],
+  fastify: FastifyInstance,
+  users: UserEntity[]
+) => {
+  // const users = await usersController.findMany(fastify);
   const posts = await postsController.findMany(fastify);
 
-  const postsMap: Record<string, PostEntity> = {};
+  const postsMap: Record<string, PostEntity[]> = {};
 
-  posts.forEach((post: PostEntity) => {
-    postsMap[post.id] = post;
+  users.forEach(({ id }: UserEntity) => {
+    postsMap[id] = posts.filter(({ userId }) => userId === id);
   });
 
   return ids.map((id) => postsMap[id]);
@@ -60,15 +78,16 @@ const batchGetPosts = async (ids: readonly string[], fastify: FastifyInstance) =
 
 const batchGetUserSubscribedTo = async (
   ids: readonly string[],
-  fastify: FastifyInstance
+  fastify: FastifyInstance,
+  users: UserEntity[]
 ) => {
-  const users = await usersController.findMany(fastify);
+  // const users = await usersController.findMany(fastify);
 
   const userSubscribedToMap: Record<string, UserEntity[]> = {};
 
-  users.forEach((userSubscribedTo: UserEntity) => {
-    userSubscribedToMap[userSubscribedTo.id] = users.filter(({ subscribedToUserIds }) =>
-      subscribedToUserIds.includes(userSubscribedTo.id)
+  users.forEach(({ id }: UserEntity) => {
+    userSubscribedToMap[id] = users.filter(({ subscribedToUserIds }) =>
+      subscribedToUserIds.includes(id)
     );
   });
 
@@ -77,9 +96,10 @@ const batchGetUserSubscribedTo = async (
 
 const batchGetSubscribedToUser = async (
   ids: readonly string[],
-  fastify: FastifyInstance
+  fastify: FastifyInstance,
+  users: UserEntity[]
 ) => {
-  const users = await usersController.findMany(fastify);
+  // const users = await usersController.findMany(fastify);
 
   const subscribedToUserMap: Record<string, UserEntity[]> = {};
 
@@ -92,24 +112,34 @@ const batchGetSubscribedToUser = async (
   return ids.map((id) => subscribedToUserMap[id]);
 };
 
-export const createDataLoaders = (fastify: FastifyInstance): DataLoadersType => ({
-  usersLoader: new DataLoader((ids: readonly string[]) => batchGetUsers(ids, fastify)),
+export const createDataLoaders = async (
+  fastify: FastifyInstance
+): Promise<DataLoadersType> => {
+  const users = await usersController.findMany(fastify);
 
-  profilesLoader: new DataLoader((ids: readonly string[]) =>
-    batchGetProfiles(ids, fastify)
-  ),
+  return {
+    usersLoader: new DataLoader((ids: readonly string[]) =>
+      batchGetUsers(ids, fastify, users)
+    ),
 
-  memberTypesLoader: new DataLoader((ids: readonly string[]) =>
-    batchGetMemberTypes(ids, fastify)
-  ),
+    profilesLoader: new DataLoader((ids: readonly string[]) =>
+      batchGetProfiles(ids, fastify, users)
+    ),
 
-  postsLoader: new DataLoader((ids: readonly string[]) => batchGetPosts(ids, fastify)),
+    memberTypesLoader: new DataLoader((ids: readonly string[]) =>
+      batchGetMemberTypes(ids, fastify)
+    ),
 
-  userSubscribedToLoader: new DataLoader((ids: readonly string[]) =>
-    batchGetUserSubscribedTo(ids, fastify)
-  ),
+    postsLoader: new DataLoader((ids: readonly string[]) =>
+      batchGetPosts(ids, fastify, users)
+    ),
 
-  subscribedToUserLoader: new DataLoader((ids: readonly string[]) =>
-    batchGetSubscribedToUser(ids, fastify)
-  ),
-});
+    userSubscribedToLoader: new DataLoader((ids: readonly string[]) =>
+      batchGetUserSubscribedTo(ids, fastify, users)
+    ),
+
+    subscribedToUserLoader: new DataLoader((ids: readonly string[]) =>
+      batchGetSubscribedToUser(ids, fastify, users)
+    ),
+  };
+};
