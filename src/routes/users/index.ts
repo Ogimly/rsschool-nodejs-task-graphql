@@ -6,11 +6,10 @@ import {
   subscribeBodySchema,
 } from './schemas';
 import type { UserEntity } from '../../utils/DB/entities/DBUsers';
+import * as usersController from '../utils/users-controller';
 
-const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
-): Promise<void> => {
-  fastify.get('/', async function (request, reply): Promise<UserEntity[]> {});
+const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
+  fastify.get('/', async (): Promise<UserEntity[]> => usersController.findMany(fastify));
 
   fastify.get(
     '/:id',
@@ -19,7 +18,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<UserEntity> {}
+    async (request): Promise<UserEntity> =>
+      usersController.findOne(fastify, request.params.id)
   );
 
   fastify.post(
@@ -29,7 +29,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         body: createUserBodySchema,
       },
     },
-    async function (request, reply): Promise<UserEntity> {}
+    async (request): Promise<UserEntity> => usersController.create(fastify, request.body)
   );
 
   fastify.delete(
@@ -39,9 +39,11 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<UserEntity> {}
+    async (request): Promise<UserEntity> =>
+      usersController.deleteOne(fastify, request.params.id)
   );
 
+  // /users/user1Id/subscribeTo body{ "userId": "user2Id" } <===> user2.subscribedToUserIds.push(user1Id)
   fastify.post(
     '/:id/subscribeTo',
     {
@@ -50,7 +52,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<UserEntity> {}
+    async (request): Promise<UserEntity> =>
+      usersController.subscribe(fastify, request.body.userId, request.params.id)
   );
 
   fastify.post(
@@ -61,7 +64,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<UserEntity> {}
+    async (request): Promise<UserEntity> =>
+      usersController.unsubscribe(fastify, request.body.userId, request.params.id)
   );
 
   fastify.patch(
@@ -72,7 +76,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<UserEntity> {}
+    async (request): Promise<UserEntity> =>
+      usersController.update(fastify, request.params.id, request.body)
   );
 };
 

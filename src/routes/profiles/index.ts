@@ -2,13 +2,13 @@ import { FastifyPluginAsyncJsonSchemaToTs } from '@fastify/type-provider-json-sc
 import { idParamSchema } from '../../utils/reusedSchemas';
 import { createProfileBodySchema, changeProfileBodySchema } from './schema';
 import type { ProfileEntity } from '../../utils/DB/entities/DBProfiles';
+import * as profilesController from '../utils/profiles-controller';
 
-const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
-): Promise<void> => {
-  fastify.get('/', async function (request, reply): Promise<
-    ProfileEntity[]
-  > {});
+const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
+  fastify.get(
+    '/',
+    async (): Promise<ProfileEntity[]> => profilesController.findMany(fastify)
+  );
 
   fastify.get(
     '/:id',
@@ -17,7 +17,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<ProfileEntity> {}
+    async (request): Promise<ProfileEntity | null> =>
+      profilesController.findOne(fastify, request.params.id)
   );
 
   fastify.post(
@@ -27,7 +28,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         body: createProfileBodySchema,
       },
     },
-    async function (request, reply): Promise<ProfileEntity> {}
+    async (request): Promise<ProfileEntity> =>
+      profilesController.create(fastify, request.body)
   );
 
   fastify.delete(
@@ -37,7 +39,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<ProfileEntity> {}
+    async (request): Promise<ProfileEntity> =>
+      profilesController.deleteOne(fastify, request.params.id)
   );
 
   fastify.patch(
@@ -48,7 +51,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<ProfileEntity> {}
+    async (request): Promise<ProfileEntity> =>
+      profilesController.update(fastify, request.params.id, request.body)
   );
 };
 

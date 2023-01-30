@@ -1,0 +1,117 @@
+import { GraphQLList, GraphQLObjectType } from 'graphql';
+import { profileType } from './db/profile';
+import { postType } from './db/post';
+import { memberTypeType } from './db/member-type';
+import { userWithAllEntitiesType } from './db/user-all-entities';
+import { profileWithMemberTypeType } from './db/profile-member-type';
+import { stringType, uuidType } from './reused';
+import * as usersController from '../../utils/users-controller';
+import * as profilesController from '../../utils/profiles-controller';
+import * as postsController from '../../utils/posts-controller';
+import * as memberTypeController from '../../utils/member-type-controller';
+import { ContextType } from '../index.d';
+
+const usersWithAllEntities = {
+  type: new GraphQLList(userWithAllEntitiesType),
+  resolve: async (_: unknown, __: unknown, { fastify }: ContextType) =>
+    usersController.findMany(fastify),
+};
+
+const userWithAllEntities = {
+  type: userWithAllEntitiesType,
+  args: {
+    id: uuidType,
+  },
+  resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
+    usersController.findOne(fastify, id),
+};
+
+export const QueryType = new GraphQLObjectType({
+  name: 'RootQueryType',
+  fields: () => ({
+    users: {
+      type: new GraphQLList(userWithAllEntitiesType),
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
+        usersController.findMany(fastify),
+    },
+
+    profiles: {
+      type: new GraphQLList(profileType),
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
+        profilesController.findMany(fastify),
+    },
+
+    profilesWithMemberType: {
+      type: new GraphQLList(profileWithMemberTypeType),
+      resolve: async (_: unknown, __: unknown, { fastify }: ContextType) =>
+        profilesController.findMany(fastify),
+    },
+
+    posts: {
+      type: new GraphQLList(postType),
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
+        postsController.findMany(fastify),
+    },
+
+    memberTypes: {
+      type: new GraphQLList(memberTypeType),
+      resolve: (_: unknown, __: unknown, { fastify }: ContextType) =>
+        memberTypeController.findMany(fastify),
+    },
+
+    user: {
+      type: userWithAllEntitiesType,
+      args: {
+        id: uuidType,
+      },
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
+        usersController.findOne(fastify, id),
+    },
+
+    profile: {
+      type: profileType,
+      args: {
+        id: uuidType,
+      },
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
+        profilesController.findOne(fastify, id),
+    },
+
+    profileWithMemberType: {
+      type: profileWithMemberTypeType,
+      args: {
+        id: uuidType,
+      },
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
+        profilesController.findOne(fastify, id),
+    },
+
+    post: {
+      type: postType,
+      args: {
+        id: uuidType,
+      },
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
+        postsController.findOne(fastify, id),
+    },
+
+    memberType: {
+      type: memberTypeType,
+      args: {
+        id: stringType,
+      },
+      resolve: async (_: unknown, { id }: any, { fastify }: ContextType) =>
+        memberTypeController.findOne(fastify, id),
+    },
+
+    usersWithAllEntities: usersWithAllEntities,
+
+    userWithAllEntities: userWithAllEntities,
+
+    usersWithUserSubscribedTo: usersWithAllEntities,
+
+    userWithSubscribedToUser: userWithAllEntities,
+
+    usersWithAllSubscriptions: usersWithAllEntities,
+  }),
+});
