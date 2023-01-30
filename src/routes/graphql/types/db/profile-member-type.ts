@@ -22,8 +22,8 @@ export const profileWithMemberTypeType = new GraphQLObjectType({
       resolve: async (
         { memberTypeId }: ProfileEntity,
         _: unknown,
-        { memberTypesLoader }: ContextType
-      ) => memberTypesLoader.load(memberTypeId),
+        { memberTypesLoaderById }: ContextType
+      ) => memberTypesLoaderById.load(memberTypeId),
     },
     avatar: stringType,
     sex: stringType,

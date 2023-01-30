@@ -8,6 +8,9 @@ export const findMany = (fastify: FastifyInstance) => fastify.db.posts.findMany(
 export const findManyByUserId = (fastify: FastifyInstance, userId: string) =>
   fastify.db.posts.findMany({ key: 'userId', equals: userId });
 
+export const findManyByUserIds = (fastify: FastifyInstance, userIds: string[]) =>
+  fastify.db.posts.findMany({ key: 'userId', equalsAnyOf: userIds });
+
 export const findOne = async (
   fastify: FastifyInstance,
   id: string,

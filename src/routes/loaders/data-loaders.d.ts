@@ -5,9 +5,9 @@ import { ProfileEntity } from '../utils/DB/entities/DBProfiles';
 import { UserEntity } from '../utils/DB/entities/DBUsers';
 
 export type DataLoadersType = {
-  usersLoader: DataLoader<string, UserEntity, string>;
-
   profilesLoader: DataLoader<string, ProfileEntity, string>;
+
+  memberTypesLoaderById: DataLoader<string, MemberTypeEntity, string>;
 
   memberTypesLoader: DataLoader<string, MemberTypeEntity, string>;
 

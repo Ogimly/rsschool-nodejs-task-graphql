@@ -10,35 +10,13 @@ import * as memberTypeController from '../utils/member-type-controller';
 import * as postsController from '../utils/posts-controller';
 import { DataLoadersType } from './data-loaders.d';
 
-// [userId]: user
-const batchGetUsers = async (
-  ids: readonly string[],
-  fastify: FastifyInstance,
-  users: UserEntity[]
-) => {
-  // const users = await usersController.findMany(fastify);
-
-  const usersMap: Record<string, UserEntity> = {};
-
-  users.forEach((user: UserEntity) => {
-    usersMap[user.id] = user;
-  });
-
-  return ids.map((id) => usersMap[id]);
-};
-
 // [userId]: profile
-const batchGetProfiles = async (
-  ids: readonly string[],
-  fastify: FastifyInstance,
-  users: UserEntity[]
-) => {
-  // const users = await usersController.findMany(fastify);
-  const profiles = await profilesController.findMany(fastify);
+const batchGetProfiles = async (ids: readonly string[], fastify: FastifyInstance) => {
+  const profiles = await profilesController.findManyByUserIds(fastify, ids as string[]);
 
   const profilesMap: Record<string, ProfileEntity | null> = {};
 
-  users.forEach(({ id }: UserEntity) => {
+  ids.forEach((id: string) => {
     profilesMap[id] = profiles.find(({ userId }: ProfileEntity) => userId === id) || null;
   });
 
@@ -46,46 +24,64 @@ const batchGetProfiles = async (
 };
 
 // [memberTypeId]: memberType
-const batchGetMemberTypes = async (ids: readonly string[], fastify: FastifyInstance) => {
-  const memberTypes = await memberTypeController.findMany(fastify);
+const batchGetMemberTypesById = async (
+  ids: readonly string[],
+  fastify: FastifyInstance
+) => {
+  const memberTypes = await memberTypeController.findManyByIds(fastify, ids as string[]);
 
-  const memberTypesMap: Record<string, MemberTypeEntity> = {};
+  const memberTypesMap: Record<string, MemberTypeEntity | null> = {};
 
-  memberTypes.forEach((memberType: MemberTypeEntity) => {
-    memberTypesMap[memberType.id] = memberType;
+  ids.forEach((id: string) => {
+    memberTypesMap[id] =
+      memberTypes.find((memberType: MemberTypeEntity) => memberType.id === id) || null;
   });
 
   return ids.map((id) => memberTypesMap[id]);
 };
 
-// [userId]: posts
-const batchGetPosts = async (
-  ids: readonly string[],
-  fastify: FastifyInstance,
-  users: UserEntity[]
-) => {
-  // const users = await usersController.findMany(fastify);
-  const posts = await postsController.findMany(fastify);
+// [userId]: memberType
+const batchGetMemberTypes = async (ids: readonly string[], fastify: FastifyInstance) => {
+  const profiles = await profilesController.findManyByUserIds(fastify, ids as string[]);
+  const memberTypes = await memberTypeController.findMany(fastify);
+
+  const memberTypesMap: Record<string, MemberTypeEntity | null> = {};
+
+  ids.forEach((id: string) => {
+    const profile = profiles.find(({ userId }: ProfileEntity) => userId === id);
+    memberTypesMap[id] = profile
+      ? memberTypes.find(
+          (memberType: MemberTypeEntity) => memberType.id === profile.memberTypeId
+        ) || null
+      : null;
+  });
+
+  return ids.map((id) => memberTypesMap[id]);
+};
+
+// [userId]: post[]
+const batchGetPosts = async (ids: readonly string[], fastify: FastifyInstance) => {
+  const posts = await postsController.findManyByUserIds(fastify, ids as string[]);
 
   const postsMap: Record<string, PostEntity[]> = {};
 
-  users.forEach(({ id }: UserEntity) => {
+  ids.forEach((id: string) => {
     postsMap[id] = posts.filter(({ userId }) => userId === id);
   });
 
   return ids.map((id) => postsMap[id]);
 };
 
+// [userId]: UserSubscribedTo[]
 const batchGetUserSubscribedTo = async (
   ids: readonly string[],
-  fastify: FastifyInstance,
-  users: UserEntity[]
+  fastify: FastifyInstance
 ) => {
-  // const users = await usersController.findMany(fastify);
+  const users = await usersController.findMany(fastify);
 
   const userSubscribedToMap: Record<string, UserEntity[]> = {};
 
-  users.forEach(({ id }: UserEntity) => {
+  ids.forEach((id: string) => {
     userSubscribedToMap[id] = users.filter(({ subscribedToUserIds }) =>
       subscribedToUserIds.includes(id)
     );
@@ -94,52 +90,48 @@ const batchGetUserSubscribedTo = async (
   return ids.map((id) => userSubscribedToMap[id]);
 };
 
+// [userId]: subscribedToUser[]
 const batchGetSubscribedToUser = async (
   ids: readonly string[],
-  fastify: FastifyInstance,
-  users: UserEntity[]
+  fastify: FastifyInstance
 ) => {
-  // const users = await usersController.findMany(fastify);
+  const users = await usersController.findMany(fastify);
 
   const subscribedToUserMap: Record<string, UserEntity[]> = {};
 
-  users.forEach((subscribedToUser: UserEntity) => {
-    subscribedToUserMap[subscribedToUser.id] = users.filter(({ id }) =>
-      subscribedToUser.subscribedToUserIds.includes(id)
-    );
+  ids.forEach((id: string) => {
+    const subscribedToUser = users.find((user: UserEntity) => user.id === id);
+    if (subscribedToUser)
+      subscribedToUserMap[subscribedToUser.id] = users.filter(({ id }) =>
+        subscribedToUser.subscribedToUserIds.includes(id)
+      );
   });
 
-  return ids.map((id) => subscribedToUserMap[id]);
+  return ids.map((id) => subscribedToUserMap[id] || []);
 };
 
 export const createDataLoaders = async (
   fastify: FastifyInstance
-): Promise<DataLoadersType> => {
-  const users = await usersController.findMany(fastify);
+): Promise<DataLoadersType> => ({
+  profilesLoader: new DataLoader((ids: readonly string[]) =>
+    batchGetProfiles(ids, fastify)
+  ),
 
-  return {
-    usersLoader: new DataLoader((ids: readonly string[]) =>
-      batchGetUsers(ids, fastify, users)
-    ),
+  memberTypesLoaderById: new DataLoader((ids: readonly string[]) =>
+    batchGetMemberTypesById(ids, fastify)
+  ),
 
-    profilesLoader: new DataLoader((ids: readonly string[]) =>
-      batchGetProfiles(ids, fastify, users)
-    ),
+  memberTypesLoader: new DataLoader((ids: readonly string[]) =>
+    batchGetMemberTypes(ids, fastify)
+  ),
 
-    memberTypesLoader: new DataLoader((ids: readonly string[]) =>
-      batchGetMemberTypes(ids, fastify)
-    ),
+  postsLoader: new DataLoader((ids: readonly string[]) => batchGetPosts(ids, fastify)),
 
-    postsLoader: new DataLoader((ids: readonly string[]) =>
-      batchGetPosts(ids, fastify, users)
-    ),
+  userSubscribedToLoader: new DataLoader((ids: readonly string[]) =>
+    batchGetUserSubscribedTo(ids, fastify)
+  ),
 
-    userSubscribedToLoader: new DataLoader((ids: readonly string[]) =>
-      batchGetUserSubscribedTo(ids, fastify, users)
-    ),
-
-    subscribedToUserLoader: new DataLoader((ids: readonly string[]) =>
-      batchGetSubscribedToUser(ids, fastify, users)
-    ),
-  };
-};
+  subscribedToUserLoader: new DataLoader((ids: readonly string[]) =>
+    batchGetSubscribedToUser(ids, fastify)
+  ),
+});

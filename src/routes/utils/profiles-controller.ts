@@ -5,6 +5,9 @@ import { ThrowError } from './throw-error';
 
 export const findMany = (fastify: FastifyInstance) => fastify.db.profiles.findMany();
 
+export const findManyByUserIds = (fastify: FastifyInstance, userIds: string[]) =>
+  fastify.db.profiles.findMany({ key: 'userId', equalsAnyOf: userIds });
+
 export const findOne = async (
   fastify: FastifyInstance,
   id: string,

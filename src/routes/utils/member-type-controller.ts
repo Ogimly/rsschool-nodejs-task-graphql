@@ -5,6 +5,9 @@ import { ThrowError } from './throw-error';
 
 export const findMany = (fastify: FastifyInstance) => fastify.db.memberTypes.findMany();
 
+export const findManyByIds = (fastify: FastifyInstance, ids: string[]) =>
+  fastify.db.memberTypes.findMany({ key: 'id', equalsAnyOf: ids });
+
 export const findOne = async (
   fastify: FastifyInstance,
   id: string,

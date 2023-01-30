@@ -11,10 +11,10 @@ import { profileWithMemberTypeType } from './profile-member-type';
 import { postType } from './post';
 import { uuidType, stringType } from '../reused';
 // import * as usersController from '../../../utils/users-controller';
-import * as profilesController from '../../../utils/profiles-controller';
+// import * as profilesController from '../../../utils/profiles-controller';
 // import * as postsController from '../../../utils/posts-controller';
-import * as memberTypeController from '../../../utils/member-type-controller';
-import { ThrowError } from '../../../utils/throw-error';
+// import * as memberTypeController from '../../../utils/member-type-controller';
+// import { ThrowError } from '../../../utils/throw-error';
 import { ContextType } from '../../index.d';
 
 export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType({
@@ -38,17 +38,22 @@ export const userWithAllEntitiesType: GraphQLOutputType = new GraphQLObjectType(
 
     memberType: {
       type: memberTypeType,
-      resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) => {
-        const found = await profilesController.findOneByUserId(
-          fastify,
-          id,
-          ThrowError.no
-        );
-        if (found)
-          return memberTypeController.findOne(fastify, found.memberTypeId, ThrowError.no);
+      // resolve: async ({ id }: UserEntity, _: unknown, { fastify }: ContextType) => {
+      //   const found = await profilesController.findOneByUserId(
+      //     fastify,
+      //     id,
+      //     ThrowError.no
+      //   );
+      //   if (found)
+      //     return memberTypeController.findOne(fastify, found.memberTypeId, ThrowError.no);
 
-        return null;
-      },
+      //   return null;
+      // },
+      resolve: async (
+        { id }: UserEntity,
+        _: unknown,
+        { memberTypesLoader }: ContextType
+      ) => memberTypesLoader.load(id),
     },
 
     profileWithMemberType: {
