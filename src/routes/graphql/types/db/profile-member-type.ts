@@ -1,7 +1,7 @@
 import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { ProfileEntity } from '../../../../utils/DB/entities/DBProfiles';
-import * as memberTypeController from '../../../utils/member-type-controller';
-import { ThrowError } from '../../../utils/throw-error';
+// import * as memberTypeController from '../../../utils/member-type-controller';
+// import { ThrowError } from '../../../utils/throw-error';
 import { numberType, stringType, uuidType } from '../reused';
 import { memberTypeType } from './member-type';
 import { ContextType } from '../../index.d';
@@ -14,11 +14,16 @@ export const profileWithMemberTypeType = new GraphQLObjectType({
     memberTypeId: stringType,
     memberType: {
       type: new GraphQLNonNull(memberTypeType),
+      // resolve: async (
+      //   { memberTypeId }: ProfileEntity,
+      //   _: unknown,
+      //   { fastify }: ContextType
+      // ) => memberTypeController.findOne(fastify, memberTypeId, ThrowError.no),
       resolve: async (
         { memberTypeId }: ProfileEntity,
         _: unknown,
-        { fastify }: ContextType
-      ) => memberTypeController.findOne(fastify, memberTypeId, ThrowError.no),
+        { memberTypesLoader }: ContextType
+      ) => memberTypesLoader.load(memberTypeId),
     },
     avatar: stringType,
     sex: stringType,
